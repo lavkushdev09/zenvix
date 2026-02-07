@@ -1,11 +1,12 @@
 import content from "@/content.json";
 import { HeroSection } from "@/components/hero-section";
-import { TechMarquee } from "@/components/tech-marquee";
 import { WorkSection } from "@/components/work-section";
 import { ServicesSection } from "@/components/services-section";
+import { TestimonialsSection } from "@/components/testimonials-section";
 import { ContactSection } from "@/components/contact-section";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { TechMarquee } from "@/components/tech-marquee";
 
 export default function Page() {
   return (
@@ -23,6 +24,7 @@ export default function Page() {
           projects={content.work.projects}
         />
         <ServicesSection services={content.services} />
+        <TestimonialsSection testimonials={content.testimonials} />
         <ContactSection contact={content.contact} />
       </main>
       <Footer

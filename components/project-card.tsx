@@ -61,12 +61,12 @@ export function ProjectCard({
     <Link
       ref={cardRef}
       href={`/work/${project.slug}`}
-      className="group block"
+      className="group block rounded-xl border border-border bg-card p-4 transition-colors duration-300 hover:border-foreground/20"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {/* Image */}
-      <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-card">
+      <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-background">
         <div ref={imageRef} className="absolute inset-0">
           <Image
             src={project.thumbnail || "/placeholder.svg"}

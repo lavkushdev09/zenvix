@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
+import { DirectionalFillButton } from "./directional-fill-button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -62,7 +63,22 @@ export function ContactSection({ contact }: ContactProps) {
   }, []);
 
   return (
-    <section ref={sectionRef} id="contact" className="py-32 lg:py-44">
+    <section ref={sectionRef} id="contact" className="relative overflow-hidden py-32 lg:py-44">
+      <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
+        <div
+          className="w-[200%] h-[70%] origin-bottom animate-floor"
+          style={{
+            background: `
+              linear-gradient(to right, #3a3a3a 2px, transparent 2px),
+              linear-gradient(to bottom, #3a3a3a 2px, transparent 2px)
+            `,
+            backgroundSize: "4rem 4rem",
+            transform: "perspective(500px) rotateX(60deg)",
+            maskImage: "linear-gradient(to top, black 0%, black 50%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to top, black 0%, black 50%, transparent 100%)",
+          }}
+        />
+      </div>
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Top line */}
         <div
@@ -91,13 +107,10 @@ export function ContactSection({ contact }: ContactProps) {
             className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-6"
             style={{ opacity: 0 }}
           >
-            <a
-              href={contact.cta.href}
-              className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-foreground text-background font-medium text-sm tracking-wide hover:gap-5 transition-all duration-300"
-            >
+            <DirectionalFillButton variant="primary" size="lg" href={contact.cta.href}>
               {contact.cta.label}
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
+              <ArrowRight className="w-4 h-4" />
+            </DirectionalFillButton>
             <a
               href={`mailto:${contact.email}`}
               className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm underline underline-offset-4 decoration-border hover:decoration-foreground"

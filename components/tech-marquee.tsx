@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
+import { SectionHeading } from "./section-heading";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,14 +19,16 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
   const track2Ref = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
 
+  // repeat list for smooth infinite scroll
   const items = [...technologies, ...technologies, ...technologies];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Label reveal
+      // Section heading reveal
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top 85%",
+        once: true,
         onEnter: () => {
           gsap.fromTo(
             labelRef.current,
@@ -32,10 +36,9 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
             { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }
           );
         },
-        once: true,
       });
 
-      // Continuous marquee
+      // Marquee animations
       if (track1Ref.current) {
         gsap.to(track1Ref.current, {
           xPercent: -33.333,
@@ -44,6 +47,7 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
           ease: "none",
         });
       }
+
       if (track2Ref.current) {
         gsap.fromTo(
           track2Ref.current,
@@ -63,44 +67,59 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
 
   return (
     <section ref={sectionRef} className="py-20 lg:py-28 overflow-hidden">
-      {/* Label */}
+      {/* Heading */}
       <div
         ref={labelRef}
-        className="max-w-[1400px] mx-auto px-6 lg:px-12 mb-12"
-        style={{ opacity: 0 }}
+        className="mx-auto mb-12 max-w-[1400px] px-6 lg:px-12 opacity-0"
       >
-        <span className="text-xs tracking-widest uppercase text-muted-foreground">
-          Technologies We Work With
-        </span>
+        <SectionHeading
+          subtitle="Our Stack"
+          title="Technologies We Work With"
+          description="We leverage cutting-edge tools and frameworks to build robust, scalable solutions for every challenge."
+          align="center"
+        />
       </div>
 
-      {/* Track 1 - left to right */}
+      {/* Track 1 */}
       <div className="mb-4 overflow-hidden">
-        <div ref={track1Ref} className="flex items-center gap-4 w-max">
+        <div ref={track1Ref} className="flex w-max items-center gap-4">
           {items.map((tech, i) => (
-            <div
-              key={`t1-${i}`}
-              className="flex items-center gap-3 px-6 py-3.5 rounded-full border border-border bg-card whitespace-nowrap hover:bg-accent hover:border-foreground/20 transition-colors duration-300"
-            >
-              <span className="text-sm font-medium text-foreground">{tech.name}</span>
-            </div>
+            <TechPill key={`t1-${i}`} tech={tech} />
           ))}
         </div>
       </div>
 
-      {/* Track 2 - right to left */}
+      {/* Track 2 */}
       <div className="overflow-hidden">
-        <div ref={track2Ref} className="flex items-center gap-4 w-max">
+        <div ref={track2Ref} className="flex w-max items-center gap-4">
           {[...items].reverse().map((tech, i) => (
-            <div
-              key={`t2-${i}`}
-              className="flex items-center gap-3 px-6 py-3.5 rounded-full border border-border bg-card whitespace-nowrap hover:bg-accent hover:border-foreground/20 transition-colors duration-300"
-            >
-              <span className="text-sm font-medium text-foreground">{tech.name}</span>
-            </div>
+            <TechPill key={`t2-${i}`} tech={tech} />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------------------------- */
+/* Tech Pill */
+/* ---------------------------- */
+
+function TechPill({ tech }: { tech: Technology }) {
+  return (
+    <div className="group flex items-center gap-3 rounded-full border border-border bg-card px-6 py-3.5 whitespace-nowrap transition-all duration-300 hover:bg-accent hover:border-foreground/20">
+      <div className="relative h-5 w-5">
+        <Image
+          src={tech.icon}
+          alt={tech.name}
+          fill
+          className="object-contain opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110"
+        />
+      </div>
+
+      <span className="text-sm font-medium text-foreground">
+        {tech.name}
+      </span>
+    </div>
   );
 }

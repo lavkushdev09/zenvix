@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { Menu, X } from "lucide-react";
+import { DirectionalFillButton } from "./directional-fill-button";
 
 interface HeaderProps {
   companyName: string;
@@ -11,6 +13,7 @@ interface HeaderProps {
 }
 
 export function Header({ companyName, navigation }: HeaderProps) {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -23,7 +26,6 @@ export function Header({ companyName, navigation }: HeaderProps) {
   }, []);
 
   useEffect(() => {
-    // Entrance animation
     if (headerRef.current) {
       gsap.fromTo(
         headerRef.current,
@@ -44,6 +46,12 @@ export function Header({ companyName, navigation }: HeaderProps) {
     }
   }, [isMobileOpen]);
 
+  function isActive(href: string) {
+    if (href === "/") return pathname === "/";
+    if (href.startsWith("/#")) return pathname === "/";
+    return pathname.startsWith(href);
+  }
+
   return (
     <header
       ref={headerRef}
@@ -55,35 +63,44 @@ export function Header({ companyName, navigation }: HeaderProps) {
       style={{ opacity: 0 }}
     >
       <nav className="max-w-[1400px] mx-auto px-6 lg:px-12 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        {/* Logo -- left */}
+        <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
           <span className="font-display text-lg font-bold text-foreground tracking-tight">
             {companyName}
           </span>
           <span className="w-1.5 h-1.5 rounded-full bg-foreground group-hover:scale-150 transition-transform duration-300" />
         </Link>
 
-        {/* Desktop nav */}
-        <ul className="hidden md:flex items-center gap-1">
-          {navigation.map((item) => (
-            <li key={item.label}>
-              <Link
-                href={item.href}
-                className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-          <li className="ml-4">
-            <Link
-              href="/#contact"
-              className="inline-flex items-center px-5 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors duration-300"
-            >
-              Get In Touch
-            </Link>
-          </li>
+        {/* Desktop nav -- center */}
+        <ul className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
+          {navigation.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <li key={item.label}>
+                <Link
+                  href={item.href}
+                  className={`relative px-4 py-2 text-sm transition-colors duration-300 ${
+                    active
+                      ? "text-foreground font-medium"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {item.label}
+                  {active && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-[2px] rounded-full bg-foreground" />
+                  )}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
+
+        {/* CTA -- right */}
+        <div className="hidden md:block flex-shrink-0">
+          <DirectionalFillButton variant="primary" href="/contact">
+            Get In Touch
+          </DirectionalFillButton>
+        </div>
 
         {/* Mobile toggle */}
         <button
@@ -105,26 +122,33 @@ export function Header({ companyName, navigation }: HeaderProps) {
           ref={mobileMenuRef}
           className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border"
         >
-          <ul className="px-6 py-6 space-y-1">
-            {navigation.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className="block text-2xl font-display font-semibold text-foreground py-2 hover:text-muted-foreground transition-colors"
-                  onClick={() => setIsMobileOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+          <ul className="px-6 py-6 flex flex-col gap-1">
+            {navigation.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className={`block text-2xl font-display font-semibold py-2 transition-colors ${
+                      active
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    onClick={() => setIsMobileOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
             <li className="pt-4">
-              <Link
-                href="/#contact"
-                className="inline-flex items-center px-6 py-3 rounded-full bg-foreground text-background text-sm font-medium"
+              <DirectionalFillButton
+                variant="primary"
+                href="/contact"
                 onClick={() => setIsMobileOpen(false)}
               >
                 Get In Touch
-              </Link>
+              </DirectionalFillButton>
             </li>
           </ul>
         </div>

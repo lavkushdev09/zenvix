@@ -84,3 +84,23 @@ html {
   pointer-events: none;
   z-index: 1;
 }
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+
+/* Add moving floor animation for CTA section */
+@keyframes moveFloor {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 4rem;
+  }
+}
+
+.animate-floor {
+  /* speed from 1.5s to 0.5s (3x faster) */
+  animation: moveFloor 0.5s linear infinite;
+}
