@@ -1,0 +1,153 @@
+{
+  "company": {
+    "name": "NovaByte",
+    "tagline": "Digital Solutions Studio",
+    "description": "We craft high-performance digital products that drive growth and transform businesses."
+  },
+  "navigation": [
+    { "label": "Home", "href": "/" },
+    { "label": "Work", "href": "/#work" },
+    { "label": "Services", "href": "/#services" },
+    { "label": "Contact", "href": "/#contact" }
+  ],
+  "hero": {
+    "headline": "We Build Software That Moves Business Forward",
+    "description": "NovaByte is a full-service digital studio specializing in scalable web applications, cloud infrastructure, and intelligent automation. We partner with ambitious teams to ship products that matter.",
+    "primaryCta": { "label": "Start a Project", "href": "/#contact" },
+    "secondaryCta": { "label": "View Our Work", "href": "/#work" }
+  },
+  "technologies": [
+    { "name": "React", "icon": "react" },
+    { "name": "Next.js", "icon": "nextjs" },
+    { "name": "Node.js", "icon": "nodejs" },
+    { "name": "TypeScript", "icon": "typescript" },
+    { "name": "Python", "icon": "python" },
+    { "name": "AWS", "icon": "aws" },
+    { "name": "Docker", "icon": "docker" },
+    { "name": "PostgreSQL", "icon": "postgresql" },
+    { "name": "GraphQL", "icon": "graphql" },
+    { "name": "Figma", "icon": "figma" }
+  ],
+  "work": {
+    "sectionTitle": "Our Work",
+    "sectionDescription": "A selection of projects we have delivered for clients across industries.",
+    "projects": [
+      {
+        "slug": "aurora-analytics",
+        "title": "Aurora Analytics",
+        "shortDescription": "Real-time analytics dashboard for enterprise SaaS metrics tracking.",
+        "techStack": ["React", "Node.js", "PostgreSQL", "D3.js"],
+        "thumbnail": "/images/projects/aurora.jpg",
+        "overview": "Aurora Analytics is a comprehensive real-time analytics platform built for a leading SaaS company. The dashboard processes millions of events per day and presents actionable insights through interactive visualizations. We designed and developed the entire frontend architecture, built a high-throughput ingestion pipeline, and delivered a product that reduced the client's decision-making latency by 60%.",
+        "challenge": "The client needed a dashboard capable of handling 10M+ daily events with sub-second query response times, while maintaining an intuitive user experience for non-technical stakeholders.",
+        "solution": "We implemented a streaming data architecture using WebSockets and server-sent events, paired with an optimized PostgreSQL backend using materialized views. The frontend leverages React with virtualized lists and D3.js for fluid, GPU-accelerated chart rendering.",
+        "gallery": ["/images/projects/aurora.jpg", "/images/projects/aurora-2.jpg"],
+        "year": "2025",
+        "client": "Confidential",
+        "category": "SaaS Platform"
+      },
+      {
+        "slug": "pulse-health",
+        "title": "Pulse Health",
+        "shortDescription": "Telemedicine platform connecting patients with healthcare providers.",
+        "techStack": ["Next.js", "TypeScript", "AWS", "WebRTC"],
+        "thumbnail": "/images/projects/pulse.jpg",
+        "overview": "Pulse Health is a HIPAA-compliant telemedicine platform that enables video consultations, prescription management, and health record access. We built the platform from the ground up, integrating secure video conferencing, real-time chat, and a robust appointment scheduling system.",
+        "challenge": "Healthcare requires the highest standards of data privacy and reliability. The platform needed end-to-end encryption, 99.99% uptime, and seamless video quality across varying network conditions.",
+        "solution": "We used WebRTC with adaptive bitrate streaming for video calls, deployed on AWS with multi-region failover. All data is encrypted at rest and in transit, with comprehensive audit logging for HIPAA compliance.",
+        "gallery": ["/images/projects/pulse.jpg", "/images/projects/pulse-2.jpg"],
+        "year": "2025",
+        "client": "Pulse Health Inc.",
+        "category": "Healthcare"
+      },
+      {
+        "slug": "vertex-commerce",
+        "title": "Vertex Commerce",
+        "shortDescription": "Headless e-commerce platform with AI-powered recommendations.",
+        "techStack": ["Next.js", "GraphQL", "Python", "Docker"],
+        "thumbnail": "/images/projects/vertex.jpg",
+        "overview": "Vertex Commerce is a next-generation headless e-commerce platform designed for high-traffic retail brands. The system features an AI recommendation engine, dynamic pricing, and a composable storefront architecture that allows brands to build unique shopping experiences.",
+        "challenge": "The client's existing platform could not handle peak traffic during sales events and lacked personalization capabilities, resulting in high cart abandonment rates.",
+        "solution": "We architected a headless commerce solution using Next.js for the storefront with ISR for optimal performance. A Python-based ML pipeline powers product recommendations, increasing conversion rates by 35%. Docker and Kubernetes ensure seamless scaling during high-traffic events.",
+        "gallery": ["/images/projects/vertex.jpg", "/images/projects/vertex-2.jpg"],
+        "year": "2024",
+        "client": "Vertex Retail Group",
+        "category": "E-Commerce"
+      },
+      {
+        "slug": "nimbus-cloud",
+        "title": "Nimbus Cloud",
+        "shortDescription": "Cloud infrastructure management console for DevOps teams.",
+        "techStack": ["React", "TypeScript", "AWS", "Terraform"],
+        "thumbnail": "/images/projects/nimbus.jpg",
+        "overview": "Nimbus Cloud is a unified infrastructure management console that gives DevOps teams complete visibility and control over their cloud resources. The platform aggregates data from multiple cloud providers and presents it through an intuitive interface with automated alerting and cost optimization tools.",
+        "challenge": "Managing multi-cloud infrastructure across AWS, GCP, and Azure required switching between multiple dashboards, leading to operational inefficiency and missed alerts.",
+        "solution": "We built a unified console with real-time resource monitoring, automated cost optimization suggestions, and an intelligent alert system that reduces noise by correlating related events. Infrastructure as Code templates allow one-click provisioning across providers.",
+        "gallery": ["/images/projects/nimbus.jpg", "/images/projects/nimbus-2.jpg"],
+        "year": "2024",
+        "client": "Nimbus Technologies",
+        "category": "DevOps"
+      },
+      {
+        "slug": "echo-ai",
+        "title": "Echo AI",
+        "shortDescription": "Conversational AI platform for enterprise customer support.",
+        "techStack": ["Python", "React", "PostgreSQL", "Docker"],
+        "thumbnail": "/images/projects/echo.jpg",
+        "overview": "Echo AI is an enterprise-grade conversational AI platform that automates customer support workflows. The system uses advanced NLP models to understand customer intent, route queries to appropriate departments, and resolve common issues autonomously, reducing support ticket volume by 45%.",
+        "challenge": "The client's support team was overwhelmed with repetitive queries, leading to long response times and poor customer satisfaction scores.",
+        "solution": "We developed a multi-agent AI system using fine-tuned language models with retrieval-augmented generation. The platform integrates with existing CRM and ticketing systems, features a human handoff protocol for complex cases, and continuously improves through feedback loops.",
+        "gallery": ["/images/projects/echo.jpg", "/images/projects/echo-2.jpg"],
+        "year": "2025",
+        "client": "Confidential",
+        "category": "AI / ML"
+      },
+      {
+        "slug": "forge-fintech",
+        "title": "Forge Fintech",
+        "shortDescription": "Digital banking platform with real-time payment processing.",
+        "techStack": ["Next.js", "Node.js", "PostgreSQL", "AWS"],
+        "thumbnail": "/images/projects/forge.jpg",
+        "overview": "Forge Fintech is a modern digital banking platform that offers real-time payment processing, account management, and financial analytics. We designed a secure, PCI-compliant system that handles thousands of transactions per second while providing an exceptional user experience.",
+        "challenge": "Legacy banking systems were slow, unreliable, and offered poor user experiences. The client needed a modern platform that could compete with neobank challengers.",
+        "solution": "We built a microservices architecture on AWS with event-driven payment processing for real-time transactions. The frontend is a Progressive Web App built with Next.js, offering native app-like performance. All financial data is encrypted with bank-grade security protocols.",
+        "gallery": ["/images/projects/forge.jpg", "/images/projects/forge-2.jpg"],
+        "year": "2024",
+        "client": "Forge Financial",
+        "category": "Fintech"
+      }
+    ]
+  },
+  "services": [
+    {
+      "title": "Web Development",
+      "description": "Full-stack applications built with modern frameworks and scalable architectures."
+    },
+    {
+      "title": "Cloud & DevOps",
+      "description": "Infrastructure design, CI/CD pipelines, and cloud-native deployment strategies."
+    },
+    {
+      "title": "AI & Automation",
+      "description": "Intelligent systems that automate workflows and extract insights from your data."
+    },
+    {
+      "title": "UI/UX Design",
+      "description": "Research-driven design that puts users first and delivers measurable results."
+    }
+  ],
+  "contact": {
+    "headline": "Let's Build Something Great",
+    "description": "Have a project in mind? We would love to hear about it. Reach out and let's discuss how we can help.",
+    "email": "hello@novabyte.dev",
+    "cta": { "label": "Get In Touch", "href": "mailto:hello@novabyte.dev" }
+  },
+  "footer": {
+    "copyright": "NovaByte. All rights reserved.",
+    "links": [
+      { "label": "GitHub", "href": "https://github.com" },
+      { "label": "LinkedIn", "href": "https://linkedin.com" },
+      { "label": "Twitter", "href": "https://twitter.com" }
+    ]
+  }
+}
