@@ -86,6 +86,11 @@ html {
   z-index: 1;
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .animate-blink {
   animation: blink 1s step-end infinite;
 }
@@ -97,12 +102,12 @@ html {
     background-position: 0 0;
   }
   100% {
-    background-position: 0 4rem;
+    background-position: 0 3rem;
   }
 }
 
 .animate-floor {
-  animation: moveFloor 0.5s linear infinite;
+  animation: moveFloor 2s linear infinite;
 }
 
 /* Custom scrollbar */

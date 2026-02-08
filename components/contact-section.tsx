@@ -84,18 +84,24 @@ export function ContactSection({ contact }: ContactProps) {
       id="contact"
       className="relative overflow-hidden py-32 lg:py-44"
     >
+      {/* Perspective grid floor */}
       <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
+        {/* Glow effect */}
         <div
-          className="w-[200%] h-[70%] origin-bottom animate-floor"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-20 blur-[120px]"
+          style={{ background: "radial-gradient(circle, #60a5fa 0%, transparent 70%)" }}
+        />
+        <div
+          className="w-[250%] h-[80%] origin-bottom animate-floor"
           style={{
             background: `
-              linear-gradient(to right, #3a3a3a 2px, transparent 2px),
-              linear-gradient(to bottom, #3a3a3a 2px, transparent 2px)
+              linear-gradient(to right, rgba(96, 165, 250, 0.25) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(96, 165, 250, 0.25) 1px, transparent 1px)
             `,
-            backgroundSize: "4rem 4rem",
-            transform: "perspective(500px) rotateX(60deg)",
-            maskImage: "linear-gradient(to top, black 0%, black 50%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to top, black 0%, black 50%, transparent 100%)",
+            backgroundSize: "3rem 3rem",
+            transform: "perspective(400px) rotateX(55deg)",
+            maskImage: "linear-gradient(to top, black 0%, black 60%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to top, black 0%, black 60%, transparent 100%)",
           }}
         />
       </div>

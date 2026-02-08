@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ArrowRight } from "lucide-react";
 import { DirectionalFillButton } from "./directional-fill-button";
@@ -22,48 +22,58 @@ const ROTATING_WORDS = [
   "Better",
 ];
 
-function useTextScramble(words: string[], interval = 3000) {
+const WORD_COLORS = [
+  "#60a5fa", // blue-400
+  "#34d399", // emerald-400
+  "#f472b6", // pink-400
+  "#fbbf24", // amber-400
+  "#a78bfa", // violet-400
+];
+
+function useTypewriter(words: string[], colors: string[], typingSpeed = 80, deletingSpeed = 50, pauseDuration = 2200) {
+  const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayText, setDisplayText] = useState(words[0]);
-  const [isScrambling, setIsScrambling] = useState(false);
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&";
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [currentColor, setCurrentColor] = useState(colors[0]);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const tick = useCallback(() => {
+    const currentWord = words[currentIndex];
+
+    if (!isDeleting) {
+      const nextText = currentWord.substring(0, displayText.length + 1);
+      setDisplayText(nextText);
+
+      if (nextText === currentWord) {
+        // Pause before deleting
+        timeoutRef.current = setTimeout(() => setIsDeleting(true), pauseDuration);
+        return;
+      }
+      timeoutRef.current = setTimeout(tick, typingSpeed + Math.random() * 40);
+    } else {
+      const nextText = currentWord.substring(0, displayText.length - 1);
+      setDisplayText(nextText);
+
+      if (nextText === "") {
+        setIsDeleting(false);
+        const nextIndex = (currentIndex + 1) % words.length;
+        setCurrentIndex(nextIndex);
+        setCurrentColor(colors[nextIndex]);
+        timeoutRef.current = setTimeout(tick, 300);
+        return;
+      }
+      timeoutRef.current = setTimeout(tick, deletingSpeed);
+    }
+  }, [displayText, currentIndex, isDeleting, words, colors, typingSpeed, deletingSpeed, pauseDuration]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIsScrambling(true);
-      const nextIndex = (currentIndex + 1) % words.length;
-      const target = words[nextIndex];
-      let iteration = 0;
-      const maxIterations = target.length;
+    timeoutRef.current = setTimeout(tick, typingSpeed);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [tick, typingSpeed]);
 
-      const scrambleInterval = setInterval(() => {
-        setDisplayText(
-          target
-            .split("")
-            .map((char, i) => {
-              if (i < iteration) return char;
-              return chars[Math.floor(Math.random() * chars.length)];
-            })
-            .join("")
-        );
-
-        iteration += 1 / 2;
-
-        if (iteration >= maxIterations) {
-          clearInterval(scrambleInterval);
-          setDisplayText(target);
-          setCurrentIndex(nextIndex);
-          setIsScrambling(false);
-        }
-      }, 30);
-
-      return () => clearInterval(scrambleInterval);
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, [currentIndex, words, interval, chars]);
-
-  return { displayText, isScrambling };
+  return { displayText, currentColor, isDeleting };
 }
 
 export function HeroSection({ hero }: HeroProps) {
@@ -77,7 +87,7 @@ export function HeroSection({ hero }: HeroProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const counterRef = useRef<HTMLDivElement>(null);
 
-  const { displayText, isScrambling } = useTextScramble(ROTATING_WORDS, 3000);
+  const { displayText, currentColor, isDeleting } = useTypewriter(ROTATING_WORDS, WORD_COLORS);
 
   // Split headline but remove last word ("Forward") since we replace it
   const headlineWithoutLast = hero.headline.replace(/\s+\S+$/, "");
@@ -177,7 +187,7 @@ export function HeroSection({ hero }: HeroProps) {
     }
 
     const gridSize = 64;
-    const dotCount = 25;
+    const dotCount = 40;
 
     const snapToGrid = (value: number) =>
       Math.round(value / gridSize) * gridSize;
@@ -193,9 +203,9 @@ export function HeroSection({ hero }: HeroProps) {
         x,
         y,
         direction: isHorizontal ? "horizontal" : "vertical",
-        speed: Math.random() * 6 + 4,
-        size: Math.random() * 1.5 + 1,
-        opacity: Math.random() * 0.4 + 0.15,
+        speed: Math.random() * 5 + 3,
+        size: Math.random() * 2 + 1.5,
+        opacity: Math.random() * 0.5 + 0.25,
         targetX: x,
         targetY: y,
         trail: [],
@@ -217,7 +227,7 @@ export function HeroSection({ hero }: HeroProps) {
 
       gridDots.forEach((dot) => {
         dot.trail.unshift({ x: dot.x, y: dot.y });
-        if (dot.trail.length > 8) dot.trail.pop();
+        if (dot.trail.length > 12) dot.trail.pop();
 
         if (dot.direction === "horizontal") {
           if (Math.abs(dot.x - dot.targetX) < dot.speed) {
@@ -286,8 +296,8 @@ export function HeroSection({ hero }: HeroProps) {
           for (let i = 0; i < dot.trail.length; i++) {
             ctx.lineTo(dot.trail[i].x, dot.trail[i].y);
           }
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-          ctx.globalAlpha = dot.opacity * 0.3;
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+          ctx.globalAlpha = dot.opacity * 0.45;
           ctx.lineWidth = dot.size;
           ctx.lineCap = "round";
           ctx.stroke();
@@ -295,9 +305,9 @@ export function HeroSection({ hero }: HeroProps) {
 
         // Draw glow
         ctx.beginPath();
-        ctx.arc(dot.x, dot.y, dot.size * 3, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-        ctx.globalAlpha = dot.opacity * 0.1;
+        ctx.arc(dot.x, dot.y, dot.size * 4, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+        ctx.globalAlpha = dot.opacity * 0.2;
         ctx.fill();
 
         // Draw dot
@@ -324,13 +334,13 @@ export function HeroSection({ hero }: HeroProps) {
       ref={sectionRef}
       className="relative min-h-screen flex flex-col items-center justify-center grain"
     >
-      {/* Grid background */}
-      <div className="absolute z-11 inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+      {/* Grid background - fully visible */}
+      <div className="absolute z-[1] inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_90%_90%_at_50%_50%,#000_50%,transparent_100%)]" />
 
-      {/* Canvas dots */}
+      {/* Canvas dots - full coverage */}
       <canvas
         ref={canvasRef}
-        className="absolute z-11 inset-0 w-full h-full pointer-events-none [mask-image:radial-gradient(ellipse_80%_60%_at_50%_20%,#000_40%,transparent_100%)]"
+        className="absolute z-[2] inset-0 w-full h-full pointer-events-none [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_60%,transparent_95%)]"
       />
 
       {/* Content */}
@@ -361,15 +371,24 @@ export function HeroSection({ hero }: HeroProps) {
               </span>
             </span>
           ))}
-          {/* Rotating word */}
+          {/* Typewriter word */}
           <span className="inline-block overflow-hidden">
             <span
               ref={rotatingRef}
-              className={`inline-block border-b-4 border-foreground pb-1 transition-opacity duration-150 ${isScrambling ? "opacity-80" : "opacity-100"
-                }`}
-              style={{ opacity: 0, minWidth: "3ch" }}
+              className="inline-block pb-1"
+              style={{ opacity: 0, minWidth: "3ch", borderBottom: `4px solid ${currentColor}`, transition: "border-color 0.4s ease" }}
             >
-              {displayText}
+              <span style={{ color: currentColor, transition: "color 0.4s ease" }}>
+                {displayText}
+              </span>
+              <span
+                className="inline-block w-[3px] h-[0.85em] ml-0.5 align-middle"
+                style={{
+                  backgroundColor: currentColor,
+                  transition: "background-color 0.4s ease",
+                  animation: "blink 1s step-end infinite",
+                }}
+              />
             </span>
           </span>
         </h1>
