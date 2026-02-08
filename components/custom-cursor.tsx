@@ -11,7 +11,6 @@ export function CustomCursor() {
   const visibleRef = useRef(false);
   const rafRef = useRef<number>(0);
 
-  // Use rAF-based smooth follow for the ring and trail
   useEffect(() => {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     if (isTouch) return;
@@ -22,13 +21,11 @@ export function CustomCursor() {
     const smoothFollow = () => {
       const target = posRef.current;
 
-      // Ring follows with smooth interpolation
-      ringPos.x += (target.x - ringPos.x) * 0.15;
-      ringPos.y += (target.y - ringPos.y) * 0.15;
+      ringPos.x += (target.x - ringPos.x) * 0.14;
+      ringPos.y += (target.y - ringPos.y) * 0.14;
 
-      // Trail follows with even smoother interpolation
-      trailPos.x += (target.x - trailPos.x) * 0.08;
-      trailPos.y += (target.y - trailPos.y) * 0.08;
+      trailPos.x += (target.x - trailPos.x) * 0.07;
+      trailPos.y += (target.y - trailPos.y) * 0.07;
 
       if (ringRef.current) {
         ringRef.current.style.transform = `translate(${ringPos.x - 20}px, ${ringPos.y - 20}px)`;
@@ -54,11 +51,11 @@ export function CustomCursor() {
       visibleRef.current = true;
       gsap.to([dotRef.current, ringRef.current, trailRef.current], {
         opacity: 1,
-        duration: 0.3,
+        duration: 0.4,
+        ease: "power2.out",
       });
     }
 
-    // Dot follows instantly via gsap.set (no interpolation)
     gsap.set(dotRef.current, {
       x: e.clientX,
       y: e.clientY,
@@ -67,37 +64,37 @@ export function CustomCursor() {
 
   const handleMouseDown = useCallback(() => {
     gsap.to(ringRef.current, {
-      scale: 0.75,
-      duration: 0.15,
+      scale: 0.7,
+      duration: 0.2,
       ease: "power2.out",
     });
     gsap.to(dotRef.current, {
-      scale: 1.8,
-      duration: 0.15,
+      scale: 2,
+      duration: 0.2,
       ease: "power2.out",
     });
     gsap.to(trailRef.current, {
-      scale: 0.6,
-      opacity: 0.08,
-      duration: 0.2,
+      scale: 0.5,
+      opacity: 0.06,
+      duration: 0.25,
     });
   }, []);
 
   const handleMouseUp = useCallback(() => {
     gsap.to(ringRef.current, {
       scale: 1,
-      duration: 0.4,
+      duration: 0.5,
       ease: "elastic.out(1, 0.3)",
     });
     gsap.to(dotRef.current, {
       scale: 1,
-      duration: 0.4,
+      duration: 0.5,
       ease: "elastic.out(1, 0.3)",
     });
     gsap.to(trailRef.current, {
       scale: 1,
-      opacity: 0.04,
-      duration: 0.4,
+      opacity: 0.03,
+      duration: 0.5,
     });
   }, []);
 
@@ -105,45 +102,46 @@ export function CustomCursor() {
     visibleRef.current = false;
     gsap.to([dotRef.current, ringRef.current, trailRef.current], {
       opacity: 0,
-      duration: 0.3,
+      duration: 0.4,
+      ease: "power2.in",
     });
   }, []);
 
   const handleMouseEnterLink = useCallback(() => {
     gsap.to(ringRef.current, {
-      scale: 2,
-      borderColor: "rgba(250, 250, 250, 0.4)",
-      duration: 0.4,
+      scale: 2.2,
+      borderColor: "rgba(245, 245, 245, 0.35)",
+      duration: 0.45,
       ease: "power2.out",
     });
     gsap.to(dotRef.current, {
       scale: 0,
-      duration: 0.3,
+      duration: 0.35,
       ease: "power2.out",
     });
     gsap.to(trailRef.current, {
-      scale: 1.5,
-      opacity: 0.06,
-      duration: 0.4,
+      scale: 1.6,
+      opacity: 0.05,
+      duration: 0.45,
     });
   }, []);
 
   const handleMouseLeaveLink = useCallback(() => {
     gsap.to(ringRef.current, {
       scale: 1,
-      borderColor: "rgba(250, 250, 250, 0.2)",
-      duration: 0.4,
+      borderColor: "rgba(245, 245, 245, 0.15)",
+      duration: 0.45,
       ease: "power2.out",
     });
     gsap.to(dotRef.current, {
       scale: 1,
-      duration: 0.4,
+      duration: 0.45,
       ease: "power2.out",
     });
     gsap.to(trailRef.current, {
       scale: 1,
-      opacity: 0.04,
-      duration: 0.4,
+      opacity: 0.03,
+      duration: 0.45,
     });
   }, []);
 
@@ -169,7 +167,6 @@ export function CustomCursor() {
 
     const links = attachLinkListeners();
 
-    // MutationObserver for dynamically added elements
     const observer = new MutationObserver(() => {
       attachLinkListeners();
     });
@@ -203,7 +200,7 @@ export function CustomCursor() {
         className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9999] mix-blend-difference"
         style={{
           opacity: 0,
-          background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(245,245,245,0.12) 0%, transparent 70%)",
         }}
       />
       {/* Small center dot */}
@@ -218,7 +215,7 @@ export function CustomCursor() {
         className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9999]"
         style={{
           opacity: 0,
-          border: "1.5px solid rgba(250, 250, 250, 0.2)",
+          border: "1.5px solid rgba(245, 245, 245, 0.15)",
           willChange: "transform",
         }}
       />

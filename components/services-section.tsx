@@ -49,7 +49,6 @@ export function ServicesSection({ services }: { services: Service[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const marqueeAnimation = useRef<gsap.core.Tween | null>(null);
 
-  // Duplicate items for seamless loop
   const items = [...services, ...services, ...services];
 
   const setupMarquee = useCallback(() => {
@@ -59,20 +58,17 @@ export function ServicesSection({ services }: { services: Service[] }) {
     const cards = track.querySelectorAll(".service-marquee-card");
     if (cards.length === 0) return;
 
-    // Calculate total width of one set of services
     let totalWidth = 0;
     const originalCount = services.length;
     for (let i = 0; i < originalCount; i++) {
       const card = cards[i] as HTMLElement;
-      totalWidth += card.offsetWidth + 20; // 20px gap
+      totalWidth += card.offsetWidth + 20;
     }
 
-    // Kill existing animation
     if (marqueeAnimation.current) {
       marqueeAnimation.current.kill();
     }
 
-    // GSAP marquee: slide left by one set width, then snap back
     marqueeAnimation.current = gsap.to(track, {
       x: -totalWidth,
       duration: 25,
@@ -88,7 +84,6 @@ export function ServicesSection({ services }: { services: Service[] }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Heading reveal
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top 80%",
@@ -98,7 +93,6 @@ export function ServicesSection({ services }: { services: Service[] }) {
         },
       });
 
-      // Also set up on load in case already visible
       setupMarquee();
     }, sectionRef);
 
@@ -110,16 +104,15 @@ export function ServicesSection({ services }: { services: Service[] }) {
     };
   }, [setupMarquee]);
 
-  // Pause on hover, resume on leave
   const handleMouseEnter = () => {
     if (marqueeAnimation.current) {
-      gsap.to(marqueeAnimation.current, { timeScale: 0, duration: 0.5 });
+      gsap.to(marqueeAnimation.current, { timeScale: 0, duration: 0.6, ease: "power2.out" });
     }
   };
 
   const handleMouseLeave = () => {
     if (marqueeAnimation.current) {
-      gsap.to(marqueeAnimation.current, { timeScale: 1, duration: 0.5 });
+      gsap.to(marqueeAnimation.current, { timeScale: 1, duration: 0.6, ease: "power2.out" });
     }
   };
 
@@ -139,9 +132,7 @@ export function ServicesSection({ services }: { services: Service[] }) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Left fade */}
         <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
-        {/* Right fade */}
         <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
 
         <div
@@ -160,39 +151,35 @@ export function ServicesSection({ services }: { services: Service[] }) {
               <Link
                 key={`${service.title}-${i}`}
                 href={data.href}
-                className="service-marquee-card group relative flex-shrink-0 w-[340px] sm:w-[400px] rounded-2xl border border-border bg-card overflow-hidden transition-all duration-500 hover:border-[hsl(0,0%,28%)] block"
+                className="service-marquee-card group relative flex-shrink-0 w-[340px] sm:w-[400px] rounded-2xl border border-border bg-card overflow-hidden transition-all duration-500 hover:border-foreground/20 block"
               >
-                {/* Hover glow */}
+                {/* Hover glow - monochromatic */}
                 <div className="absolute inset-0 bg-foreground/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
                 <div className="relative p-8">
-                  {/* Top row: number + icon */}
                   <div className="flex items-center justify-between mb-8">
                     <span className="text-xs font-mono text-muted-foreground/40 tracking-widest">
                       {data.number}
                     </span>
-                    <div className="w-12 h-12 rounded-xl border border-border bg-background flex items-center justify-center text-muted-foreground group-hover:text-foreground group-hover:border-[hsl(0,0%,28%)] transition-all duration-500">
+                    <div className="w-12 h-12 rounded-xl border border-border bg-background flex items-center justify-center text-muted-foreground group-hover:text-foreground group-hover:border-foreground/20 transition-all duration-500">
                       {data.icon}
                     </div>
                   </div>
 
-                  {/* Title */}
                   <h3 className="font-display text-2xl font-bold text-foreground mb-3 flex items-center gap-3">
                     {service.title}
                     <ArrowUpRight className="w-5 h-5 text-muted-foreground/30 group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-500" />
                   </h3>
 
-                  {/* Description */}
                   <p className="text-sm text-muted-foreground leading-relaxed mb-8">
                     {service.description}
                   </p>
 
-                  {/* Tags */}
                   <div className="flex flex-wrap gap-2">
                     {data.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-3 py-1.5 text-xs rounded-full border border-border text-muted-foreground group-hover:border-[hsl(0,0%,22%)] group-hover:text-foreground/70 transition-all duration-500"
+                        className="px-3 py-1.5 text-xs rounded-full border border-border text-muted-foreground group-hover:border-foreground/15 group-hover:text-foreground/70 transition-all duration-500"
                       >
                         {tag}
                       </span>
@@ -200,8 +187,8 @@ export function ServicesSection({ services }: { services: Service[] }) {
                   </div>
                 </div>
 
-                {/* Bottom accent line */}
-                <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-foreground/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
+                {/* Bottom accent line - monochromatic */}
+                <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-foreground/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
               </Link>
             );
           })}

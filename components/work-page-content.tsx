@@ -24,28 +24,49 @@ interface WorkPageContentProps {
   projects: Project[];
 }
 
-function BentoCard({
+function AnimatedWorkCard({
   project,
   index,
-  size = "normal",
 }: {
   project: Project;
   index: number;
-  size?: "featured" | "tall" | "normal";
 }) {
   const cardRef = useRef<HTMLAnchorElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
+  const shineRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = () => {
+    if (!cardRef.current) return;
     gsap.to(imageRef.current, {
-      scale: 1.06,
+      scale: 1.08,
       duration: 0.8,
       ease: "power2.out",
     });
-    gsap.to(overlayRef.current, { opacity: 1, duration: 0.4 });
-    gsap.to(contentRef.current, { y: -4, duration: 0.4, ease: "power2.out" });
+    gsap.to(overlayRef.current, {
+      opacity: 1,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    gsap.to(contentRef.current, {
+      y: -6,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+    gsap.to(arrowRef.current, {
+      rotate: 45,
+      scale: 1.1,
+      duration: 0.4,
+      ease: "power2.out",
+    });
+    // Shine sweep effect
+    gsap.fromTo(
+      shineRef.current,
+      { x: "-100%", opacity: 0.15 },
+      { x: "200%", opacity: 0, duration: 0.8, ease: "power2.inOut" }
+    );
   };
 
   const handleMouseLeave = () => {
@@ -54,93 +75,108 @@ function BentoCard({
       duration: 0.8,
       ease: "power2.out",
     });
-    gsap.to(overlayRef.current, { opacity: 0, duration: 0.4 });
-    gsap.to(contentRef.current, { y: 0, duration: 0.4, ease: "power2.out" });
+    gsap.to(overlayRef.current, {
+      opacity: 0,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    gsap.to(contentRef.current, {
+      y: 0,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+    gsap.to(arrowRef.current, {
+      rotate: 0,
+      scale: 1,
+      duration: 0.4,
+      ease: "power2.out",
+    });
   };
-
-  const aspectClass =
-    size === "featured"
-      ? "aspect-[16/9]"
-      : size === "tall"
-        ? "aspect-[3/4]"
-        : "aspect-[4/3]";
 
   return (
     <Link
       ref={cardRef}
       href={`/work/${project.slug}`}
-      className="group block relative rounded-2xl overflow-hidden border border-border bg-card transition-all duration-500 hover:border-foreground/20"
+      className="group block relative rounded-2xl overflow-hidden border border-border bg-card transition-all duration-700 hover:border-foreground/20 hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.06)]"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {/* Image area */}
-      <div className={`relative ${aspectClass} overflow-hidden`}>
+      <div className="relative aspect-[16/10] overflow-hidden">
         <div ref={imageRef} className="absolute inset-0">
           <Image
             src={project.thumbnail || "/placeholder.svg"}
             alt={`${project.title} project`}
             fill
             className="object-cover"
-            sizes={size === "featured" ? "100vw" : "(max-width: 1024px) 100vw, 50vw"}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
         {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
         {/* Hover overlay */}
         <div
           ref={overlayRef}
-          className="absolute inset-0 bg-background/20 backdrop-blur-[1px] opacity-0"
+          className="absolute inset-0 bg-background/30 backdrop-blur-[2px] opacity-0"
+        />
+        {/* Shine sweep */}
+        <div
+          ref={shineRef}
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/10 to-transparent pointer-events-none"
+          style={{ transform: "translateX(-100%)" }}
         />
         {/* Number badge */}
-        <div className="absolute top-4 left-4 z-10">
-          <span className="text-xs font-mono text-foreground/70 bg-background/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/40">
+        <div className="absolute top-5 left-5 z-10">
+          <span className="text-xs font-mono text-foreground/70 bg-background/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-foreground/10">
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>
         {/* Category badge */}
-        <div className="absolute top-4 right-4 z-10">
-          <span className="text-[10px] tracking-widest uppercase text-foreground/60 bg-background/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/40">
+        <div className="absolute top-5 right-5 z-10">
+          <span className="text-[10px] tracking-widest uppercase text-foreground/60 bg-background/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-foreground/10">
             {project.category}
           </span>
         </div>
       </div>
 
       {/* Content */}
-      <div ref={contentRef} className="p-6">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-xs text-muted-foreground">{project.year}</span>
+      <div ref={contentRef} className="p-6 lg:p-7">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-xs text-muted-foreground font-mono">{project.year}</span>
+          <span className="w-4 h-px bg-border" />
+          <span className="text-xs text-muted-foreground tracking-wider uppercase">{project.category}</span>
         </div>
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
-            <h3
-              className={`font-display font-bold text-foreground tracking-tight group-hover:text-muted-foreground transition-colors duration-300 ${
-                size === "featured"
-                  ? "text-2xl lg:text-3xl"
-                  : "text-xl lg:text-2xl"
-              }`}
-            >
+            <h3 className="font-display text-xl lg:text-2xl font-bold text-foreground tracking-tight group-hover:text-foreground/80 transition-colors duration-500">
               {project.title}
             </h3>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-2">
               {project.shortDescription}
             </p>
           </div>
-          <div className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground/30 group-hover:text-foreground group-hover:border-foreground/30 group-hover:rotate-45 transition-all duration-500">
+          <div
+            ref={arrowRef}
+            className="flex-shrink-0 w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground/30 group-hover:text-foreground group-hover:border-foreground/30 transition-colors duration-500"
+          >
             <ArrowUpRight className="w-4 h-4" />
           </div>
         </div>
         {/* Tech stack */}
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-5 flex flex-wrap gap-2">
           {project.techStack.map((tech) => (
             <span
               key={tech}
-              className="px-2.5 py-1 text-xs rounded-full border border-border text-muted-foreground group-hover:border-foreground/20 transition-colors duration-300"
+              className="px-2.5 py-1 text-xs rounded-full border border-border text-muted-foreground group-hover:border-foreground/15 group-hover:text-foreground/60 transition-all duration-500"
             >
               {tech}
             </span>
           ))}
         </div>
       </div>
+
+      {/* Bottom accent line */}
+      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-foreground/15 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
     </Link>
   );
 }
@@ -203,33 +239,26 @@ export function WorkPageContent({ projects }: WorkPageContentProps) {
     return () => ctx.revert();
   }, []);
 
-  // Animate cards on filter change
+  // Animate cards on filter change with staggered entrance
   useEffect(() => {
     if (!gridRef.current) return;
     const ctx = gsap.context(() => {
-      const cards = gridRef.current!.querySelectorAll(".bento-card-item");
+      const cards = gridRef.current!.querySelectorAll(".work-card-item");
       gsap.fromTo(
         cards,
-        { y: 50, opacity: 0, scale: 0.97 },
+        { y: 60, opacity: 0, scale: 0.96 },
         {
           y: 0,
           opacity: 1,
           scale: 1,
-          duration: 0.7,
+          duration: 0.8,
           ease: "power3.out",
-          stagger: 0.08,
+          stagger: 0.1,
         }
       );
     }, sectionRef);
     return () => ctx.revert();
   }, [activeFilter]);
-
-  // Determine bento layout sizes based on position
-  const getCardSize = (index: number): "featured" | "tall" | "normal" => {
-    if (index === 0) return "featured";
-    if (index === 3 || index === 4) return "tall";
-    return "normal";
-  };
 
   return (
     <section ref={sectionRef} className="min-h-screen">
@@ -269,7 +298,7 @@ export function WorkPageContent({ projects }: WorkPageContentProps) {
         </div>
       </div>
 
-      {/* Filter + bento grid */}
+      {/* Filter + Grid */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-16 lg:py-24">
         {/* Category filter */}
         <div
@@ -292,75 +321,26 @@ export function WorkPageContent({ projects }: WorkPageContentProps) {
           ))}
         </div>
 
-        {/* Bento Grid Layout */}
-        <div ref={gridRef}>
-          {filteredProjects.length > 0 && (
-            <div className="flex flex-col gap-6 lg:gap-8">
-              {/* Row 1: Featured full-width card */}
-              <div className="bento-card-item" style={{ opacity: 0 }}>
-                <BentoCard
-                  project={filteredProjects[0]}
-                  index={0}
-                  size="featured"
-                />
-              </div>
-
-              {/* Row 2: Two equal cards */}
-              {filteredProjects.length > 1 && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                  {filteredProjects.slice(1, 3).map((project, i) => (
-                    <div
-                      key={project.slug}
-                      className="bento-card-item"
-                      style={{ opacity: 0 }}
-                    >
-                      <BentoCard project={project} index={i + 1} size="normal" />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Row 3: Asymmetric - tall left + stacked right */}
-              {filteredProjects.length > 3 && (
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
-                  <div
-                    className="lg:col-span-2 bento-card-item"
-                    style={{ opacity: 0 }}
-                  >
-                    <BentoCard
-                      project={filteredProjects[3]}
-                      index={3}
-                      size="tall"
-                    />
-                  </div>
-                  <div className="lg:col-span-3 flex flex-col gap-6 lg:gap-8">
-                    {filteredProjects.slice(4).map((project, i) => (
-                      <div
-                        key={project.slug}
-                        className="bento-card-item"
-                        style={{ opacity: 0 }}
-                      >
-                        <BentoCard
-                          project={project}
-                          index={i + 4}
-                          size="normal"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+        {/* Masonry-style grid */}
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {filteredProjects.map((project, i) => (
+            <div
+              key={project.slug}
+              className="work-card-item"
+              style={{ opacity: 0 }}
+            >
+              <AnimatedWorkCard project={project} index={i} />
             </div>
-          )}
-
-          {filteredProjects.length === 0 && (
-            <div className="text-center py-24">
-              <p className="text-muted-foreground text-lg">
-                No projects found in this category.
-              </p>
-            </div>
-          )}
+          ))}
         </div>
+
+        {filteredProjects.length === 0 && (
+          <div className="text-center py-24">
+            <p className="text-muted-foreground text-lg">
+              No projects found in this category.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

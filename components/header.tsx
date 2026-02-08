@@ -60,7 +60,7 @@ export function Header({ companyName, navigation }: HeaderProps) {
         }`}
         style={{ opacity: 0 }}
       >
-        <nav className="relative flex items-center justify-between rounded-full border border-[hsl(0,0%,16%)] bg-[hsl(0,0%,5%)]/95 backdrop-blur-xl px-3 py-2">
+        <nav className="relative flex items-center justify-between rounded-full border border-border bg-background/90 backdrop-blur-xl px-3 py-2">
           {/* Logo */}
           <Link
             href="/"
@@ -84,7 +84,7 @@ export function Header({ companyName, navigation }: HeaderProps) {
                 strokeLinecap="round"
               />
             </svg>
-            <span className="font-display text-base font-bold text-foreground tracking-tight">
+            <span className="font-display text-base font-bold text-foreground tracking-tight group-hover:text-muted-foreground transition-colors duration-300">
               {companyName}
             </span>
           </Link>
@@ -97,13 +97,16 @@ export function Header({ companyName, navigation }: HeaderProps) {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className={`px-4 py-2 text-sm transition-colors duration-300 rounded-full ${
+                    className={`relative px-4 py-2 text-sm transition-colors duration-300 rounded-full ${
                       active
                         ? "text-foreground font-medium"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     {item.label}
+                    {active && (
+                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-foreground" />
+                    )}
                   </Link>
                 </li>
               );
@@ -114,7 +117,7 @@ export function Header({ companyName, navigation }: HeaderProps) {
           <div className="hidden md:block flex-shrink-0">
             <Link
               href="/contact"
-              className="inline-flex items-center px-6 py-2 rounded-full bg-foreground text-background text-sm font-semibold transition-all duration-300 hover:bg-foreground/90"
+              className="inline-flex items-center px-6 py-2 rounded-full bg-foreground text-background text-sm font-semibold transition-all duration-300 hover:bg-foreground/85 hover:shadow-[0_0_20px_-5px_rgba(255,255,255,0.2)]"
             >
               Chat With Us
             </Link>
@@ -138,7 +141,7 @@ export function Header({ companyName, navigation }: HeaderProps) {
         {isMobileOpen && (
           <div
             ref={mobileMenuRef}
-            className="md:hidden mt-2 rounded-2xl bg-[hsl(0,0%,5%)]/95 backdrop-blur-xl border border-[hsl(0,0%,16%)] overflow-hidden"
+            className="md:hidden mt-2 rounded-2xl bg-background/95 backdrop-blur-xl border border-border overflow-hidden"
           >
             <ul className="px-6 py-6 flex flex-col gap-1">
               {navigation.map((item) => {

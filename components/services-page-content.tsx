@@ -22,7 +22,6 @@ const services = [
     description:
       "Full-stack applications built with modern frameworks and scalable architectures. From single-page apps to complex enterprise platforms.",
     icon: <Code2 className="w-6 h-6" />,
-    accentColor: "#60a5fa",
     features: [
       "Custom web application development",
       "Progressive Web Apps (PWA)",
@@ -37,7 +36,6 @@ const services = [
     description:
       "Infrastructure design, CI/CD pipelines, and cloud-native deployment strategies that scale with your business.",
     icon: <Cloud className="w-6 h-6" />,
-    accentColor: "#34d399",
     features: [
       "AWS / GCP / Azure architecture",
       "CI/CD pipeline setup",
@@ -52,7 +50,6 @@ const services = [
     description:
       "Intelligent systems that automate workflows and extract actionable insights from your data.",
     icon: <Cpu className="w-6 h-6" />,
-    accentColor: "#f472b6",
     features: [
       "Custom AI/ML model development",
       "Conversational AI and chatbots",
@@ -67,7 +64,6 @@ const services = [
     description:
       "Research-driven design that puts users first and delivers measurable results through intuitive interfaces.",
     icon: <Palette className="w-6 h-6" />,
-    accentColor: "#fbbf24",
     features: [
       "User research and testing",
       "Wireframing and prototyping",
@@ -242,17 +238,11 @@ export function ServicesPageContent() {
                 }`}
               >
                 <span
-                  className="w-2 h-2 rounded-full transition-all duration-400"
-                  style={{
-                    backgroundColor:
-                      activeService === i
-                        ? service.accentColor
-                        : "hsl(var(--muted-foreground))",
-                    boxShadow:
-                      activeService === i
-                        ? `0 0 8px ${service.accentColor}50`
-                        : "none",
-                  }}
+                  className={`w-2 h-2 rounded-full transition-all duration-400 ${
+                    activeService === i
+                      ? "bg-foreground shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+                      : "bg-muted-foreground"
+                  }`}
                 />
                 {service.title}
               </button>
@@ -263,13 +253,7 @@ export function ServicesPageContent() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
             {/* Left: Service info */}
             <div className="lg:col-span-5">
-              <div
-                className="w-14 h-14 rounded-2xl border border-border flex items-center justify-center mb-8 transition-all duration-500"
-                style={{
-                  borderColor: `${services[activeService].accentColor}40`,
-                  color: services[activeService].accentColor,
-                }}
-              >
+              <div className="w-14 h-14 rounded-2xl border border-border flex items-center justify-center mb-8 text-foreground transition-all duration-500">
                 {services[activeService].icon}
               </div>
               <h3 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4 tracking-tight">
@@ -287,15 +271,12 @@ export function ServicesPageContent() {
             {/* Right: Features grid */}
             <div className="lg:col-span-7">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {services[activeService].features.map((feature, fi) => (
+                {services[activeService].features.map((feature) => (
                   <div
                     key={feature}
                     className="group flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:border-foreground/15 transition-all duration-400"
                   >
-                    <CheckCircle2
-                      className="w-4 h-4 mt-0.5 flex-shrink-0 transition-colors duration-400"
-                      style={{ color: services[activeService].accentColor }}
-                    />
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-foreground/40 group-hover:text-foreground transition-colors duration-400" />
                     <span className="text-sm text-muted-foreground group-hover:text-foreground leading-relaxed transition-colors duration-300">
                       {feature}
                     </span>
@@ -317,22 +298,11 @@ export function ServicesPageContent() {
                 style={{ opacity: 0 }}
                 onMouseEnter={() => setActiveService(i)}
               >
-                {/* Accent top border */}
-                <div
-                  className="absolute top-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"
-                  style={{ backgroundColor: service.accentColor }}
-                />
+                {/* Accent top border - monochromatic */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-foreground scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
 
                 <div className="flex items-start justify-between gap-4 mb-4">
-                  <div
-                    className="w-12 h-12 rounded-xl border border-border flex items-center justify-center text-muted-foreground group-hover:border-foreground/20 transition-all duration-400"
-                    style={{
-                      color:
-                        activeService === i
-                          ? service.accentColor
-                          : undefined,
-                    }}
-                  >
+                  <div className="w-12 h-12 rounded-xl border border-border flex items-center justify-center text-muted-foreground group-hover:text-foreground group-hover:border-foreground/20 transition-all duration-400">
                     {service.icon}
                   </div>
                   <span className="text-xs font-mono text-muted-foreground/30 tracking-widest">
@@ -370,14 +340,11 @@ export function ServicesPageContent() {
                 className="group relative rounded-2xl border border-border bg-card p-8 lg:p-10 hover:border-foreground/20 transition-all duration-500 overflow-hidden"
                 style={{ opacity: 0 }}
               >
-                {/* Step number as large background element */}
                 <span className="absolute -top-4 -right-2 font-display text-[6rem] font-bold text-foreground/[0.03] group-hover:text-foreground/[0.06] transition-colors duration-500 leading-none select-none">
                   {item.step}
                 </span>
                 <div className="relative">
-                  <span
-                    className="inline-block font-display text-sm font-bold text-foreground/30 group-hover:text-foreground/50 transition-colors duration-300 mb-6"
-                  >
+                  <span className="inline-block font-display text-sm font-bold text-foreground/30 group-hover:text-foreground/50 transition-colors duration-300 mb-6">
                     Step {item.step}
                   </span>
                   <h3 className="font-display text-xl font-semibold text-foreground mb-3">

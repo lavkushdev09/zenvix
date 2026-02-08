@@ -30,14 +30,13 @@ export function ProjectCard({
   const handleMouseEnter = () => {
     if (!imageRef.current || !arrowRef.current) return;
     gsap.to(imageRef.current, {
-      scale: 1.04,
-      duration: 0.6,
+      scale: 1.05,
+      duration: 0.7,
       ease: "power2.out",
     });
     gsap.to(arrowRef.current, {
-      x: 4,
-      y: -4,
-      duration: 0.3,
+      rotate: 45,
+      duration: 0.4,
       ease: "power2.out",
     });
   };
@@ -46,13 +45,12 @@ export function ProjectCard({
     if (!imageRef.current || !arrowRef.current) return;
     gsap.to(imageRef.current, {
       scale: 1,
-      duration: 0.6,
+      duration: 0.7,
       ease: "power2.out",
     });
     gsap.to(arrowRef.current, {
-      x: 0,
-      y: 0,
-      duration: 0.3,
+      rotate: 0,
+      duration: 0.4,
       ease: "power2.out",
     });
   };
@@ -61,7 +59,7 @@ export function ProjectCard({
     <Link
       ref={cardRef}
       href={`/work/${project.slug}`}
-      className="group block rounded-xl border border-border bg-card p-4 transition-colors duration-300 hover:border-foreground/20"
+      className="group block rounded-xl border border-border bg-card p-4 transition-all duration-500 hover:border-foreground/20 hover:shadow-[0_0_40px_-10px_rgba(255,255,255,0.05)]"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -76,9 +74,8 @@ export function ProjectCard({
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
         </div>
-        {/* Number overlay */}
         <div className="absolute top-4 left-4 z-10">
-          <span className="text-xs font-mono text-foreground/60 bg-background/60 backdrop-blur-sm px-2.5 py-1 rounded-full">
+          <span className="text-xs font-mono text-foreground/60 bg-background/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-foreground/10">
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>
@@ -112,7 +109,7 @@ export function ProjectCard({
             {project.techStack.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="inline-block px-2.5 py-1 text-xs rounded-full border border-border text-muted-foreground"
+                className="inline-block px-2.5 py-1 text-xs rounded-full border border-border text-muted-foreground group-hover:border-foreground/15 transition-colors duration-300"
               >
                 {tech}
               </span>

@@ -29,7 +29,6 @@ export function TestimonialsSection({
   const [activeIndex, setActiveIndex] = useState(0);
   const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Carousel with 3 visible at a time on desktop, 1 on mobile
   const totalSlides = testimonials.length;
 
   const goTo = useCallback(
@@ -39,19 +38,17 @@ export function TestimonialsSection({
 
       if (!trackRef.current) return;
 
-      // Animate the track position
       gsap.to(trackRef.current, {
         x: `${-clamped * (100 / totalSlides)}%`,
-        duration: 0.7,
+        duration: 0.8,
         ease: "power3.out",
       });
 
-      // Highlight the active card
       cardsRef.current.filter(Boolean).forEach((card, i) => {
         gsap.to(card, {
           scale: i === clamped ? 1.02 : 1,
           opacity: Math.abs(i - clamped) <= 1 ? 1 : 0.5,
-          duration: 0.5,
+          duration: 0.6,
           ease: "power2.out",
         });
       });
@@ -68,7 +65,6 @@ export function TestimonialsSection({
     [activeIndex, totalSlides, goTo]
   );
 
-  // Autoplay
   useEffect(() => {
     autoplayRef.current = setInterval(() => {
       setActiveIndex((prev) => {
@@ -76,7 +72,7 @@ export function TestimonialsSection({
         if (trackRef.current) {
           gsap.to(trackRef.current, {
             x: `${-nextIdx * (100 / totalSlides)}%`,
-            duration: 0.7,
+            duration: 0.8,
             ease: "power3.out",
           });
         }
@@ -88,7 +84,6 @@ export function TestimonialsSection({
     };
   }, [totalSlides]);
 
-  // Scroll-triggered entrance
   useEffect(() => {
     const ctx = gsap.context(() => {
       cardsRef.current.filter(Boolean).forEach((card, i) => {
@@ -127,7 +122,7 @@ export function TestimonialsSection({
         if (trackRef.current) {
           gsap.to(trackRef.current, {
             x: `${-nextIdx * (100 / totalSlides)}%`,
-            duration: 0.7,
+            duration: 0.8,
             ease: "power3.out",
           });
         }
@@ -148,7 +143,6 @@ export function TestimonialsSection({
             subtitle="Client Testimonials"
             title="What Our Clients Say"
           />
-          {/* Navigation arrows */}
           <div className="flex items-center gap-3 mb-16">
             <button
               onClick={() => {
@@ -175,7 +169,6 @@ export function TestimonialsSection({
           </div>
         </div>
 
-        {/* Carousel viewport */}
         <div className="overflow-hidden">
           <div
             ref={trackRef}
@@ -204,12 +197,11 @@ export function TestimonialsSection({
                       : "border-border hover:border-foreground/10"
                   }`}
                 >
-                  {/* Decorative gradient orb */}
-                  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-foreground/[0.02] blur-3xl group-hover:bg-foreground/[0.05] transition-colors duration-700 pointer-events-none" />
+                  {/* Subtle glow - monochromatic */}
+                  <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-foreground/[0.01] blur-3xl group-hover:bg-foreground/[0.03] transition-colors duration-700 pointer-events-none" />
 
-                  {/* Quote icon + rating */}
                   <div className="flex items-center justify-between mb-8">
-                    <Quote className="w-10 h-10 text-foreground/10 group-hover:text-foreground/20 transition-colors duration-500" />
+                    <Quote className="w-10 h-10 text-foreground/8 group-hover:text-foreground/15 transition-colors duration-500" />
                     <div className="flex items-center gap-1">
                       {Array.from({ length: 5 }).map((_, starIdx) => (
                         <Star
@@ -224,14 +216,12 @@ export function TestimonialsSection({
                     </div>
                   </div>
 
-                  {/* Quote */}
                   <p className="text-base lg:text-lg leading-relaxed text-muted-foreground group-hover:text-foreground/80 transition-colors duration-500 mb-10">
                     &ldquo;{testimonial.quote}&rdquo;
                   </p>
 
-                  {/* Author */}
                   <div className="flex items-center gap-4 mt-auto">
-                    <div className="w-12 h-12 rounded-full bg-foreground/10 border border-border flex items-center justify-center text-sm font-display font-bold text-foreground">
+                    <div className="w-12 h-12 rounded-full bg-foreground/8 border border-border flex items-center justify-center text-sm font-display font-bold text-foreground">
                       {testimonial.name
                         .split(" ")
                         .map((n) => n[0])
@@ -252,7 +242,6 @@ export function TestimonialsSection({
           </div>
         </div>
 
-        {/* Dot indicators */}
         <div className="flex items-center justify-center gap-2 mt-10">
           {testimonials.map((_, i) => (
             <button

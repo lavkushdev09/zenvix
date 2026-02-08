@@ -21,7 +21,6 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
   const marquee1Ref = useRef<gsap.core.Tween | null>(null);
   const marquee2Ref = useRef<gsap.core.Tween | null>(null);
 
-  // Duplicate items for seamless loop (triple for safety)
   const row1 = [...technologies, ...technologies, ...technologies];
   const row2 = [...technologies, ...technologies, ...technologies];
 
@@ -31,17 +30,15 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
     const cards1 = track1Ref.current.querySelectorAll(".tech-item");
     if (cards1.length === 0) return;
 
-    // Calculate one set width
     let setWidth = 0;
     for (let i = 0; i < technologies.length; i++) {
       const card = cards1[i] as HTMLElement;
-      if (card) setWidth += card.offsetWidth + 24; // 24px gap
+      if (card) setWidth += card.offsetWidth + 24;
     }
 
     if (marquee1Ref.current) marquee1Ref.current.kill();
     if (marquee2Ref.current) marquee2Ref.current.kill();
 
-    // Row 1: scroll left
     marquee1Ref.current = gsap.to(track1Ref.current, {
       x: -setWidth,
       duration: 35,
@@ -52,7 +49,6 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
       },
     });
 
-    // Row 2: scroll right (reversed)
     gsap.set(track2Ref.current, { x: -setWidth });
     marquee2Ref.current = gsap.to(track2Ref.current, {
       x: 0,
@@ -70,7 +66,6 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Heading fade in
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top 85%",
@@ -110,7 +105,7 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
         </div>
       </div>
 
-      {/* Row 1 - scrolling left */}
+      {/* Row 1 */}
       <div className="relative mb-6">
         <div className="absolute left-0 top-0 bottom-0 w-24 lg:w-40 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-40 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
@@ -121,7 +116,7 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
         </div>
       </div>
 
-      {/* Row 2 - scrolling right */}
+      {/* Row 2 */}
       <div className="relative">
         <div className="absolute left-0 top-0 bottom-0 w-24 lg:w-40 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-40 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
@@ -137,13 +132,13 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
 
 function TechItem({ tech }: { tech: Technology }) {
   return (
-    <div className="tech-item flex-shrink-0 flex items-center gap-4 px-6 py-4 rounded-2xl border border-[hsl(0,0%,12%)] bg-[hsl(0,0%,4%)] hover:border-[hsl(0,0%,22%)] hover:bg-[hsl(0,0%,6%)] transition-all duration-300 cursor-default group">
-      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-[hsl(0,0%,8%)] border border-[hsl(0,0%,14%)] flex-shrink-0 group-hover:border-[hsl(0,0%,22%)] transition-colors duration-300">
+    <div className="tech-item flex-shrink-0 flex items-center gap-4 px-6 py-4 rounded-2xl border border-border bg-card hover:border-foreground/20 hover:bg-secondary transition-all duration-300 cursor-default group">
+      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-secondary border border-border flex-shrink-0 group-hover:border-foreground/20 transition-colors duration-300">
         <Image
           src={tech.icon}
           alt={tech.name}
           fill
-          className="object-contain p-1.5 opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+          className="object-contain p-1.5 opacity-70 group-hover:opacity-100 transition-opacity duration-300"
         />
       </div>
       <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 whitespace-nowrap tracking-wide">

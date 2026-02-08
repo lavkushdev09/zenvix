@@ -4,9 +4,10 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SectionHeading } from "./section-heading";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { DirectionalFillButton } from "./directional-fill-button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,15 +31,21 @@ function FeaturedCard({ project }: { project: Project }) {
   const cardRef = useRef<HTMLAnchorElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const shineRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = () => {
-    gsap.to(imageRef.current, { scale: 1.03, duration: 0.8, ease: "power2.out" });
-    gsap.to(overlayRef.current, { opacity: 1, duration: 0.4 });
+    gsap.to(imageRef.current, { scale: 1.04, duration: 0.8, ease: "power2.out" });
+    gsap.to(overlayRef.current, { opacity: 1, duration: 0.5 });
+    gsap.fromTo(
+      shineRef.current,
+      { x: "-100%", opacity: 0.1 },
+      { x: "200%", opacity: 0, duration: 0.8, ease: "power2.inOut" }
+    );
   };
 
   const handleMouseLeave = () => {
     gsap.to(imageRef.current, { scale: 1, duration: 0.8, ease: "power2.out" });
-    gsap.to(overlayRef.current, { opacity: 0, duration: 0.4 });
+    gsap.to(overlayRef.current, { opacity: 0, duration: 0.5 });
   };
 
   return (
@@ -49,7 +56,7 @@ function FeaturedCard({ project }: { project: Project }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="relative aspect-[21/9] overflow-hidden rounded-2xl bg-card border border-border">
+      <div className="relative aspect-[21/9] overflow-hidden rounded-2xl bg-card border border-border hover:border-foreground/15 transition-colors duration-500">
         <div ref={imageRef} className="absolute inset-0">
           <Image
             src={project.thumbnail || "/placeholder.svg"}
@@ -59,26 +66,27 @@ function FeaturedCard({ project }: { project: Project }) {
             sizes="100vw"
           />
         </div>
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-        {/* Hover overlay */}
         <div
           ref={overlayRef}
           className="absolute inset-0 bg-background/30 backdrop-blur-[2px] opacity-0"
         />
-        {/* Number */}
+        {/* Shine */}
+        <div
+          ref={shineRef}
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/8 to-transparent pointer-events-none"
+          style={{ transform: "translateX(-100%)" }}
+        />
         <div className="absolute top-6 left-6 z-10">
-          <span className="font-mono text-sm text-foreground/60 bg-background/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/50">
+          <span className="font-mono text-sm text-foreground/60 bg-background/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-foreground/10">
             01
           </span>
         </div>
-        {/* Featured badge */}
         <div className="absolute top-6 right-6 z-10">
-          <span className="text-xs tracking-widest uppercase text-foreground/60 bg-background/60 backdrop-blur-sm px-4 py-1.5 rounded-full border border-border/50">
+          <span className="text-xs tracking-widest uppercase text-foreground/60 bg-background/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-foreground/10">
             Featured
           </span>
         </div>
-        {/* Bottom content */}
         <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
           <div className="flex items-end justify-between gap-6">
             <div className="flex-1">
@@ -99,7 +107,7 @@ function FeaturedCard({ project }: { project: Project }) {
                 {project.techStack.map((tech) => (
                   <span
                     key={tech}
-                    className="px-3 py-1 text-xs rounded-full border border-border/50 text-muted-foreground bg-background/40 backdrop-blur-sm"
+                    className="px-3 py-1 text-xs rounded-full border border-foreground/10 text-muted-foreground bg-background/40 backdrop-blur-sm"
                   >
                     {tech}
                   </span>
@@ -142,12 +150,10 @@ function ProjectRow({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Number */}
       <span className="font-mono text-sm text-muted-foreground/40 lg:w-12 flex-shrink-0">
         {String(index).padStart(2, "0")}
       </span>
 
-      {/* Thumbnail */}
       <div className="relative w-full lg:w-48 aspect-[16/10] lg:aspect-[3/2] overflow-hidden rounded-xl bg-card flex-shrink-0">
         <div ref={imageRef} className="absolute inset-0">
           <Image
@@ -160,7 +166,6 @@ function ProjectRow({
         </div>
       </div>
 
-      {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-3 mb-1.5">
           <span className="text-xs tracking-wider uppercase text-muted-foreground">
@@ -177,7 +182,6 @@ function ProjectRow({
         </p>
       </div>
 
-      {/* Tech stack */}
       <div className="hidden lg:flex flex-wrap gap-2 flex-shrink-0 max-w-[240px]">
         {project.techStack.slice(0, 3).map((tech) => (
           <span
@@ -189,7 +193,6 @@ function ProjectRow({
         ))}
       </div>
 
-      {/* Arrow */}
       <div className="hidden lg:flex flex-shrink-0 w-10 h-10 rounded-full border border-border items-center justify-center text-muted-foreground/30 group-hover:text-foreground group-hover:border-foreground/30 group-hover:rotate-45 transition-all duration-500">
         <ArrowUpRight className="w-4 h-4" />
       </div>
@@ -206,10 +209,10 @@ export function WorkSection({
   const lineRef = useRef<HTMLDivElement>(null);
   const featuredRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Top line
       ScrollTrigger.create({
         trigger: lineRef.current,
         start: "top 85%",
@@ -223,7 +226,6 @@ export function WorkSection({
         once: true,
       });
 
-      // Featured card
       ScrollTrigger.create({
         trigger: featuredRef.current,
         start: "top 80%",
@@ -237,7 +239,6 @@ export function WorkSection({
         once: true,
       });
 
-      // Project rows
       if (listRef.current) {
         const rows = listRef.current.children;
         Array.from(rows).forEach((row, i) => {
@@ -261,13 +262,28 @@ export function WorkSection({
           });
         });
       }
+
+      if (ctaRef.current) {
+        ScrollTrigger.create({
+          trigger: ctaRef.current,
+          start: "top 90%",
+          onEnter: () => {
+            gsap.fromTo(
+              ctaRef.current,
+              { y: 30, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }
+            );
+          },
+          once: true,
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   const featured = projects[0];
-  const rest = projects.slice(1);
+  const rest = projects.slice(1, 4);
 
   return (
     <section ref={sectionRef} id="work" className="py-24 lg:py-32">
@@ -283,20 +299,26 @@ export function WorkSection({
           style={{ transform: "scaleX(0)" }}
         />
 
-        {/* Featured project */}
         {featured && (
           <div ref={featuredRef} style={{ opacity: 0 }}>
             <FeaturedCard project={featured} />
           </div>
         )}
 
-        {/* Project list */}
         <div ref={listRef} className="mt-8">
           {rest.map((project, i) => (
             <div key={project.slug} style={{ opacity: 0 }}>
               <ProjectRow project={project} index={i + 2} />
             </div>
           ))}
+        </div>
+
+        {/* View all work CTA */}
+        <div ref={ctaRef} className="mt-16 flex justify-center" style={{ opacity: 0 }}>
+          <DirectionalFillButton variant="outline" href="/work">
+            View All Projects
+            <ArrowRight className="w-4 h-4" />
+          </DirectionalFillButton>
         </div>
       </div>
     </section>

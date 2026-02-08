@@ -93,7 +93,7 @@ export function ContactPageContent({ contact }: ContactPageContentProps) {
   ];
 
   const inputClasses =
-    "w-full bg-card border border-border rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground/30 focus:border-foreground/30 transition-all duration-300";
+    "w-full bg-card border border-border rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-foreground/20 focus:border-foreground/20 transition-all duration-300";
 
   return (
     <div ref={heroRef}>

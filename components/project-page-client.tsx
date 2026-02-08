@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { DirectionalFillButton } from "./directional-fill-button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,14 +33,12 @@ interface Props {
 export function ProjectPageClient({ project, contactCta }: Props) {
   const heroRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const galleryRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero reveal
       const heroTl = gsap.timeline({ defaults: { ease: "power4.out" }, delay: 0.2 });
 
       heroTl.fromTo(
@@ -55,7 +54,6 @@ export function ProjectPageClient({ project, contactCta }: Props) {
         "-=0.4"
       );
 
-      // Image parallax
       if (imageRef.current) {
         gsap.to(imageRef.current?.querySelector("img"), {
           yPercent: 10,
@@ -69,7 +67,6 @@ export function ProjectPageClient({ project, contactCta }: Props) {
         });
       }
 
-      // Content sections reveal
       sectionsRef.current.filter(Boolean).forEach((section) => {
         ScrollTrigger.create({
           trigger: section,
@@ -85,7 +82,6 @@ export function ProjectPageClient({ project, contactCta }: Props) {
         });
       });
 
-      // Gallery reveal
       if (galleryRef.current) {
         const galleryItems = galleryRef.current.children;
         ScrollTrigger.create({
@@ -108,7 +104,6 @@ export function ProjectPageClient({ project, contactCta }: Props) {
         });
       }
 
-      // CTA reveal
       if (ctaRef.current) {
         ScrollTrigger.create({
           trigger: ctaRef.current,
@@ -133,7 +128,7 @@ export function ProjectPageClient({ project, contactCta }: Props) {
       {/* Back link */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 mb-12">
         <Link
-          href="/#work"
+          href="/work"
           className="group inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
         >
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
@@ -147,7 +142,6 @@ export function ProjectPageClient({ project, contactCta }: Props) {
         className="max-w-[1400px] mx-auto px-6 lg:px-12"
         style={{ opacity: 0 }}
       >
-        {/* Meta */}
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <span className="px-3 py-1 rounded-full border border-border text-xs tracking-wider uppercase text-muted-foreground">
             {project.category}
@@ -164,7 +158,6 @@ export function ProjectPageClient({ project, contactCta }: Props) {
           {project.shortDescription}
         </p>
 
-        {/* Tech stack */}
         <div className="mt-8 flex flex-wrap gap-2">
           {project.techStack.map((tech) => (
             <span
@@ -183,7 +176,7 @@ export function ProjectPageClient({ project, contactCta }: Props) {
         className="max-w-[1400px] mx-auto px-6 lg:px-12 mt-14"
         style={{ opacity: 0 }}
       >
-        <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-card">
+        <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-card border border-border">
           <Image
             src={project.thumbnail || "/placeholder.svg"}
             alt={`${project.title} preview`}
@@ -198,7 +191,6 @@ export function ProjectPageClient({ project, contactCta }: Props) {
       {/* Content */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 mt-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-          {/* Main content */}
           <div className="lg:col-span-8 space-y-16">
             <section
               ref={(el) => { sectionsRef.current[0] = el; }}
@@ -306,7 +298,7 @@ export function ProjectPageClient({ project, contactCta }: Props) {
           {project.gallery.map((img, i) => (
             <div
               key={i}
-              className="relative aspect-[16/10] rounded-xl overflow-hidden bg-card"
+              className="relative aspect-[16/10] rounded-xl overflow-hidden bg-card border border-border"
               style={{ opacity: 0 }}
             >
               <Image
@@ -336,13 +328,10 @@ export function ProjectPageClient({ project, contactCta }: Props) {
               {"Let's discuss your next project."}
             </p>
           </div>
-          <a
-            href={contactCta.href}
-            className="group inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-foreground text-background font-medium text-sm tracking-wide hover:gap-5 transition-all duration-300 whitespace-nowrap"
-          >
+          <DirectionalFillButton variant="primary" href={contactCta.href}>
             {contactCta.label}
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-          </a>
+            <ArrowRight className="w-4 h-4" />
+          </DirectionalFillButton>
         </div>
       </div>
     </div>

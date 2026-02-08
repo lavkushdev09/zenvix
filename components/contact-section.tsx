@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Mail } from "lucide-react";
@@ -17,10 +17,8 @@ interface ContactProps {
   };
 }
 
-
 export function ContactSection({ contact }: ContactProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -82,21 +80,20 @@ export function ContactSection({ contact }: ContactProps) {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative overflow-hidden py-32 lg:py-44"
+      className="relative overflow-hidden py-20 lg:py-28"
     >
-      {/* Perspective grid floor */}
+      {/* Monochromatic perspective grid floor */}
       <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
-        {/* Glow effect */}
+        {/* Subtle white glow */}
         <div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-20 blur-[120px]"
-          style={{ background: "radial-gradient(circle, #60a5fa 0%, transparent 70%)" }}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-[0.06] blur-[120px] bg-foreground"
         />
         <div
           className="w-[250%] h-[80%] origin-bottom animate-floor"
           style={{
             background: `
-              linear-gradient(to right, rgba(96, 165, 250, 0.25) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(96, 165, 250, 0.25) 1px, transparent 1px)
+              linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px)
             `,
             backgroundSize: "3rem 3rem",
             transform: "perspective(400px) rotateX(55deg)",
@@ -110,11 +107,11 @@ export function ContactSection({ contact }: ContactProps) {
         {/* Top line */}
         <div
           ref={lineRef}
-          className="h-px bg-border origin-left mb-16"
+          className="h-px bg-border origin-left mb-12"
           style={{ transform: "scaleX(0)" }}
         />
 
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-16">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12">
           {/* Left content */}
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border text-xs tracking-widest uppercase text-muted-foreground mb-8">

@@ -40,21 +40,21 @@ function getEntryDirection(e: React.MouseEvent, rect: DOMRect): Direction {
 function getOffset(direction: Direction) {
   switch (direction) {
     case "top":
-      return { x: "0%", y: "-100%" };
+      return { x: "0%", y: "-110%" };
     case "top-right":
-      return { x: "100%", y: "-100%" };
+      return { x: "110%", y: "-110%" };
     case "right":
-      return { x: "100%", y: "0%" };
+      return { x: "110%", y: "0%" };
     case "bottom-right":
-      return { x: "100%", y: "100%" };
+      return { x: "110%", y: "110%" };
     case "bottom":
-      return { x: "0%", y: "100%" };
+      return { x: "0%", y: "110%" };
     case "bottom-left":
-      return { x: "-100%", y: "100%" };
+      return { x: "-110%", y: "110%" };
     case "left":
-      return { x: "-100%", y: "0%" };
+      return { x: "-110%", y: "0%" };
     case "top-left":
-      return { x: "-100%", y: "-100%" };
+      return { x: "-110%", y: "-110%" };
   }
 }
 
@@ -68,6 +68,7 @@ export function DirectionalFillButton({
 }: DirectionalFillButtonProps) {
   const btnRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
   const fillRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = useCallback((e: React.MouseEvent) => {
@@ -82,9 +83,18 @@ export function DirectionalFillButton({
     gsap.to(fillRef.current, {
       x: "0%",
       y: "0%",
-      duration: 0.4,
+      duration: 0.5,
       ease: "power3.out",
     });
+
+    // Subtle text lift
+    if (textRef.current) {
+      gsap.to(textRef.current, {
+        y: -1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    }
   }, []);
 
   const handleMouseLeave = useCallback((e: React.MouseEvent) => {
@@ -98,9 +108,17 @@ export function DirectionalFillButton({
     gsap.to(fillRef.current, {
       x: offset.x,
       y: offset.y,
-      duration: 0.4,
+      duration: 0.45,
       ease: "power3.in",
     });
+
+    if (textRef.current) {
+      gsap.to(textRef.current, {
+        y: 0,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    }
   }, []);
 
   const isPrimary = variant === "primary";
@@ -108,10 +126,11 @@ export function DirectionalFillButton({
   const baseClasses = cn(
     "relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-medium text-sm tracking-wide",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    "transition-shadow duration-500",
     size === "lg" ? "px-8 py-4" : "px-7 py-3",
     isPrimary
-      ? "bg-foreground border border-foreground"
-      : "bg-transparent border border-border",
+      ? "bg-foreground border border-foreground hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.15)]"
+      : "bg-transparent border border-border hover:border-foreground/30 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.08)]",
     className
   );
 
@@ -120,8 +139,6 @@ export function DirectionalFillButton({
     isPrimary ? "bg-background" : "bg-foreground"
   );
 
-  // Primary: white bg + black text, on hover fill=black so text=white
-  // Outline: transparent bg + white text, on hover fill=white so text=black
   const textColor = isPrimary
     ? isHovered
       ? "text-foreground"
@@ -138,6 +155,7 @@ export function DirectionalFillButton({
         style={{ transform: "translateX(-110%) translateY(0%)" }}
       />
       <span
+        ref={textRef}
         className={cn(
           "relative z-10 inline-flex items-center gap-2 transition-colors duration-300",
           textColor

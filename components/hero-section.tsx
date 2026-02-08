@@ -22,19 +22,10 @@ const ROTATING_WORDS = [
   "Better",
 ];
 
-const WORD_COLORS = [
-  "#60a5fa", // blue-400
-  "#34d399", // emerald-400
-  "#f472b6", // pink-400
-  "#fbbf24", // amber-400
-  "#a78bfa", // violet-400
-];
-
-function useTypewriter(words: string[], colors: string[], typingSpeed = 80, deletingSpeed = 50, pauseDuration = 2200) {
+function useTypewriter(words: string[], typingSpeed = 80, deletingSpeed = 50, pauseDuration = 2200) {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [currentColor, setCurrentColor] = useState(colors[0]);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const tick = useCallback(() => {
@@ -45,7 +36,6 @@ function useTypewriter(words: string[], colors: string[], typingSpeed = 80, dele
       setDisplayText(nextText);
 
       if (nextText === currentWord) {
-        // Pause before deleting
         timeoutRef.current = setTimeout(() => setIsDeleting(true), pauseDuration);
         return;
       }
@@ -58,13 +48,12 @@ function useTypewriter(words: string[], colors: string[], typingSpeed = 80, dele
         setIsDeleting(false);
         const nextIndex = (currentIndex + 1) % words.length;
         setCurrentIndex(nextIndex);
-        setCurrentColor(colors[nextIndex]);
         timeoutRef.current = setTimeout(tick, 300);
         return;
       }
       timeoutRef.current = setTimeout(tick, deletingSpeed);
     }
-  }, [displayText, currentIndex, isDeleting, words, colors, typingSpeed, deletingSpeed, pauseDuration]);
+  }, [displayText, currentIndex, isDeleting, words, typingSpeed, deletingSpeed, pauseDuration]);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(tick, typingSpeed);
@@ -73,7 +62,7 @@ function useTypewriter(words: string[], colors: string[], typingSpeed = 80, dele
     };
   }, [tick, typingSpeed]);
 
-  return { displayText, currentColor, isDeleting };
+  return { displayText };
 }
 
 export function HeroSection({ hero }: HeroProps) {
@@ -85,11 +74,9 @@ export function HeroSection({ hero }: HeroProps) {
   const lineRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const counterRef = useRef<HTMLDivElement>(null);
 
-  const { displayText, currentColor, isDeleting } = useTypewriter(ROTATING_WORDS, WORD_COLORS);
+  const { displayText } = useTypewriter(ROTATING_WORDS);
 
-  // Split headline but remove last word ("Forward") since we replace it
   const headlineWithoutLast = hero.headline.replace(/\s+\S+$/, "");
   const words = headlineWithoutLast.split(" ");
 
@@ -141,13 +128,6 @@ export function HeroSection({ hero }: HeroProps) {
       );
 
       tl.fromTo(
-        counterRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6 },
-        "-=0.3"
-      );
-
-      tl.fromTo(
         lineRef.current,
         { scaleX: 0 },
         { scaleX: 1, duration: 1.2, ease: "power2.inOut" },
@@ -158,7 +138,7 @@ export function HeroSection({ hero }: HeroProps) {
     return () => ctx.revert();
   }, []);
 
-  // Canvas background animation
+  // Canvas background animation - monochromatic
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -187,7 +167,7 @@ export function HeroSection({ hero }: HeroProps) {
     }
 
     const gridSize = 64;
-    const dotCount = 40;
+    const dotCount = 30;
 
     const snapToGrid = (value: number) =>
       Math.round(value / gridSize) * gridSize;
@@ -203,9 +183,9 @@ export function HeroSection({ hero }: HeroProps) {
         x,
         y,
         direction: isHorizontal ? "horizontal" : "vertical",
-        speed: Math.random() * 5 + 3,
-        size: Math.random() * 2 + 1.5,
-        opacity: Math.random() * 0.5 + 0.25,
+        speed: Math.random() * 4 + 2,
+        size: Math.random() * 1.5 + 1,
+        opacity: Math.random() * 0.3 + 0.1,
         targetX: x,
         targetY: y,
         trail: [],
@@ -227,7 +207,7 @@ export function HeroSection({ hero }: HeroProps) {
 
       gridDots.forEach((dot) => {
         dot.trail.unshift({ x: dot.x, y: dot.y });
-        if (dot.trail.length > 12) dot.trail.pop();
+        if (dot.trail.length > 10) dot.trail.pop();
 
         if (dot.direction === "horizontal") {
           if (Math.abs(dot.x - dot.targetX) < dot.speed) {
@@ -235,14 +215,10 @@ export function HeroSection({ hero }: HeroProps) {
             if (Math.random() > 0.7) {
               dot.direction = "vertical";
               const steps = Math.floor(Math.random() * 5) + 1;
-              dot.targetY =
-                dot.y +
-                (Math.random() > 0.5 ? 1 : -1) * steps * gridSize;
+              dot.targetY = dot.y + (Math.random() > 0.5 ? 1 : -1) * steps * gridSize;
             } else {
               const steps = Math.floor(Math.random() * 8) + 2;
-              dot.targetX =
-                dot.x +
-                (Math.random() > 0.5 ? 1 : -1) * steps * gridSize;
+              dot.targetX = dot.x + (Math.random() > 0.5 ? 1 : -1) * steps * gridSize;
             }
           } else {
             dot.x += dot.x < dot.targetX ? dot.speed : -dot.speed;
@@ -253,14 +229,10 @@ export function HeroSection({ hero }: HeroProps) {
             if (Math.random() > 0.7) {
               dot.direction = "horizontal";
               const steps = Math.floor(Math.random() * 8) + 2;
-              dot.targetX =
-                dot.x +
-                (Math.random() > 0.5 ? 1 : -1) * steps * gridSize;
+              dot.targetX = dot.x + (Math.random() > 0.5 ? 1 : -1) * steps * gridSize;
             } else {
               const steps = Math.floor(Math.random() * 5) + 1;
-              dot.targetY =
-                dot.y +
-                (Math.random() > 0.5 ? 1 : -1) * steps * gridSize;
+              dot.targetY = dot.y + (Math.random() > 0.5 ? 1 : -1) * steps * gridSize;
             }
           } else {
             dot.y += dot.y < dot.targetY ? dot.speed : -dot.speed;
@@ -268,53 +240,37 @@ export function HeroSection({ hero }: HeroProps) {
         }
 
         // Wrap around
-        if (dot.x < -gridSize) {
-          dot.x = canvas.offsetWidth + gridSize;
-          dot.targetX = dot.x;
-          dot.trail = [];
-        }
-        if (dot.x > canvas.offsetWidth + gridSize) {
-          dot.x = -gridSize;
-          dot.targetX = dot.x;
-          dot.trail = [];
-        }
-        if (dot.y < -gridSize) {
-          dot.y = canvas.offsetHeight + gridSize;
-          dot.targetY = dot.y;
-          dot.trail = [];
-        }
-        if (dot.y > canvas.offsetHeight + gridSize) {
-          dot.y = -gridSize;
-          dot.targetY = dot.y;
-          dot.trail = [];
-        }
+        if (dot.x < -gridSize) { dot.x = canvas.offsetWidth + gridSize; dot.targetX = dot.x; dot.trail = []; }
+        if (dot.x > canvas.offsetWidth + gridSize) { dot.x = -gridSize; dot.targetX = dot.x; dot.trail = []; }
+        if (dot.y < -gridSize) { dot.y = canvas.offsetHeight + gridSize; dot.targetY = dot.y; dot.trail = []; }
+        if (dot.y > canvas.offsetHeight + gridSize) { dot.y = -gridSize; dot.targetY = dot.y; dot.trail = []; }
 
-        // Draw trail
+        // Draw trail - pure white, monochromatic
         if (dot.trail.length > 1) {
           ctx.beginPath();
           ctx.moveTo(dot.x, dot.y);
           for (let i = 0; i < dot.trail.length; i++) {
             ctx.lineTo(dot.trail[i].x, dot.trail[i].y);
           }
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
-          ctx.globalAlpha = dot.opacity * 0.45;
-          ctx.lineWidth = dot.size;
+          ctx.strokeStyle = `rgba(255, 255, 255, ${dot.opacity * 0.3})`;
+          ctx.globalAlpha = 1;
+          ctx.lineWidth = dot.size * 0.8;
           ctx.lineCap = "round";
           ctx.stroke();
         }
 
         // Draw glow
         ctx.beginPath();
-        ctx.arc(dot.x, dot.y, dot.size * 4, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-        ctx.globalAlpha = dot.opacity * 0.2;
+        ctx.arc(dot.x, dot.y, dot.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${dot.opacity * 0.12})`;
+        ctx.globalAlpha = 1;
         ctx.fill();
 
         // Draw dot
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-        ctx.globalAlpha = dot.opacity;
+        ctx.fillStyle = `rgba(255, 255, 255, ${dot.opacity * 0.6})`;
+        ctx.globalAlpha = 1;
         ctx.fill();
       });
 
@@ -334,13 +290,13 @@ export function HeroSection({ hero }: HeroProps) {
       ref={sectionRef}
       className="relative min-h-screen flex flex-col items-center justify-center grain"
     >
-      {/* Grid background - fully visible */}
-      <div className="absolute z-[1] inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_90%_90%_at_50%_50%,#000_50%,transparent_100%)]" />
+      {/* Grid background */}
+      <div className="absolute z-[1] inset-0 bg-[linear-gradient(to_right,hsl(0_0%_10%)_1px,transparent_1px),linear-gradient(to_bottom,hsl(0_0%_10%)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_40%,transparent_100%)]" />
 
-      {/* Canvas dots - full coverage */}
+      {/* Canvas dots */}
       <canvas
         ref={canvasRef}
-        className="absolute z-[2] inset-0 w-full h-full pointer-events-none [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_60%,transparent_95%)]"
+        className="absolute z-[2] inset-0 w-full h-full pointer-events-none [mask-image:radial-gradient(ellipse_90%_90%_at_50%_50%,#000_50%,transparent_90%)]"
       />
 
       {/* Content */}
@@ -371,21 +327,19 @@ export function HeroSection({ hero }: HeroProps) {
               </span>
             </span>
           ))}
-          {/* Typewriter word */}
+          {/* Typewriter word - monochromatic */}
           <span className="inline-block overflow-hidden">
             <span
               ref={rotatingRef}
               className="inline-block pb-1"
-              style={{ opacity: 0, minWidth: "3ch", borderBottom: `4px solid ${currentColor}`, transition: "border-color 0.4s ease" }}
+              style={{ opacity: 0, minWidth: "3ch", borderBottom: "4px solid hsl(0 0% 96%)" }}
             >
-              <span style={{ color: currentColor, transition: "color 0.4s ease" }}>
+              <span className="text-foreground">
                 {displayText}
               </span>
               <span
-                className="inline-block w-[3px] h-[0.85em] ml-0.5 align-middle"
+                className="inline-block w-[3px] h-[0.85em] ml-0.5 align-middle bg-foreground"
                 style={{
-                  backgroundColor: currentColor,
-                  transition: "background-color 0.4s ease",
                   animation: "blink 1s step-end infinite",
                 }}
               />
