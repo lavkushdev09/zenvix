@@ -142,6 +142,7 @@ export function TestimonialsSection({
           <SectionHeading
             subtitle="Client Testimonials"
             title="What Our Clients Say"
+            align="center"
           />
           <div className="flex items-center gap-3 mb-16">
             <button

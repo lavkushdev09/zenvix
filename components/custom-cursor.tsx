@@ -10,6 +10,7 @@ export function CustomCursor() {
   const posRef = useRef({ x: -100, y: -100 });
   const visibleRef = useRef(false);
   const rafRef = useRef<number>(0);
+  const scaleRef = useRef({ ring: 1, dot: 1, trail: 1 });
 
   useEffect(() => {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
@@ -21,17 +22,25 @@ export function CustomCursor() {
     const smoothFollow = () => {
       const target = posRef.current;
 
-      ringPos.x += (target.x - ringPos.x) * 0.14;
-      ringPos.y += (target.y - ringPos.y) * 0.14;
+      ringPos.x += (target.x - ringPos.x) * 0.15;
+      ringPos.y += (target.y - ringPos.y) * 0.15;
 
-      trailPos.x += (target.x - trailPos.x) * 0.07;
-      trailPos.y += (target.y - trailPos.y) * 0.07;
+      trailPos.x += (target.x - trailPos.x) * 0.08;
+      trailPos.y += (target.y - trailPos.y) * 0.08;
+
+      if (dotRef.current) {
+        dotRef.current.style.left = `${target.x}px`;
+        dotRef.current.style.top = `${target.y}px`;
+      }
 
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringPos.x - 20}px, ${ringPos.y - 20}px)`;
+        ringRef.current.style.left = `${ringPos.x}px`;
+        ringRef.current.style.top = `${ringPos.y}px`;
       }
+
       if (trailRef.current) {
-        trailRef.current.style.transform = `translate(${trailPos.x - 30}px, ${trailPos.y - 30}px)`;
+        trailRef.current.style.left = `${trailPos.x}px`;
+        trailRef.current.style.top = `${trailPos.y}px`;
       }
 
       rafRef.current = requestAnimationFrame(smoothFollow);
@@ -49,100 +58,129 @@ export function CustomCursor() {
 
     if (!visibleRef.current) {
       visibleRef.current = true;
-      gsap.to([dotRef.current, ringRef.current, trailRef.current], {
-        opacity: 1,
-        duration: 0.4,
-        ease: "power2.out",
+      [dotRef.current, ringRef.current, trailRef.current].forEach((el) => {
+        if (el) el.style.opacity = "1";
       });
     }
-
-    gsap.set(dotRef.current, {
-      x: e.clientX,
-      y: e.clientY,
-    });
   }, []);
 
   const handleMouseDown = useCallback(() => {
-    gsap.to(ringRef.current, {
-      scale: 0.7,
-      duration: 0.2,
-      ease: "power2.out",
-    });
-    gsap.to(dotRef.current, {
-      scale: 2,
-      duration: 0.2,
-      ease: "power2.out",
-    });
-    gsap.to(trailRef.current, {
-      scale: 0.5,
-      opacity: 0.06,
-      duration: 0.25,
-    });
+    scaleRef.current.ring = 0.7;
+    scaleRef.current.dot = 2;
+    scaleRef.current.trail = 0.5;
+
+    if (ringRef.current) {
+      gsap.to(ringRef.current, {
+        scale: 0.7,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+    }
+    if (dotRef.current) {
+      gsap.to(dotRef.current, {
+        scale: 2,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+    }
+    if (trailRef.current) {
+      gsap.to(trailRef.current, {
+        scale: 0.5,
+        opacity: 0.06,
+        duration: 0.25,
+      });
+    }
   }, []);
 
   const handleMouseUp = useCallback(() => {
-    gsap.to(ringRef.current, {
-      scale: 1,
-      duration: 0.5,
-      ease: "elastic.out(1, 0.3)",
-    });
-    gsap.to(dotRef.current, {
-      scale: 1,
-      duration: 0.5,
-      ease: "elastic.out(1, 0.3)",
-    });
-    gsap.to(trailRef.current, {
-      scale: 1,
-      opacity: 0.03,
-      duration: 0.5,
-    });
+    scaleRef.current.ring = 1;
+    scaleRef.current.dot = 1;
+    scaleRef.current.trail = 1;
+
+    if (ringRef.current) {
+      gsap.to(ringRef.current, {
+        scale: 1,
+        duration: 0.5,
+        ease: "elastic.out(1, 0.3)",
+      });
+    }
+    if (dotRef.current) {
+      gsap.to(dotRef.current, {
+        scale: 1,
+        duration: 0.5,
+        ease: "elastic.out(1, 0.3)",
+      });
+    }
+    if (trailRef.current) {
+      gsap.to(trailRef.current, {
+        scale: 1,
+        opacity: 0.03,
+        duration: 0.5,
+      });
+    }
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     visibleRef.current = false;
-    gsap.to([dotRef.current, ringRef.current, trailRef.current], {
-      opacity: 0,
-      duration: 0.4,
-      ease: "power2.in",
+    [dotRef.current, ringRef.current, trailRef.current].forEach((el) => {
+      if (el) {
+        gsap.to(el, {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.in",
+        });
+      }
     });
   }, []);
 
   const handleMouseEnterLink = useCallback(() => {
-    gsap.to(ringRef.current, {
-      scale: 2.2,
-      borderColor: "rgba(245, 245, 245, 0.35)",
-      duration: 0.45,
-      ease: "power2.out",
-    });
-    gsap.to(dotRef.current, {
-      scale: 0,
-      duration: 0.35,
-      ease: "power2.out",
-    });
-    gsap.to(trailRef.current, {
-      scale: 1.6,
-      opacity: 0.05,
-      duration: 0.45,
-    });
+    if (ringRef.current) {
+      gsap.to(ringRef.current, {
+        scale: 2.2,
+        borderColor: "rgba(245, 245, 245, 0.35)",
+        duration: 0.45,
+        ease: "power2.out",
+      });
+    }
+    if (dotRef.current) {
+      gsap.to(dotRef.current, {
+        scale: 0,
+        duration: 0.35,
+        ease: "power2.out",
+      });
+    }
+    if (trailRef.current) {
+      gsap.to(trailRef.current, {
+        scale: 1.6,
+        opacity: 0.05,
+        duration: 0.45,
+      });
+    }
   }, []);
 
   const handleMouseLeaveLink = useCallback(() => {
-    gsap.to(ringRef.current, {
-      scale: 1,
-      borderColor: "rgba(245, 245, 245, 0.15)",
-      duration: 0.45,
-      ease: "power2.out",
-    });
-    gsap.to(dotRef.current, {
-      scale: 1,
-      duration: 0.45,
-      ease: "power2.out",
-    });
-    gsap.to(trailRef.current, {
-      scale: 1,
-      opacity: 0.03,
-      duration: 0.45,
-    });
+    if (ringRef.current) {
+      gsap.to(ringRef.current, {
+        scale: 1,
+        borderColor: "rgba(245, 245, 245, 0.15)",
+        duration: 0.45,
+        ease: "power2.out",
+      });
+    }
+    if (dotRef.current) {
+      gsap.to(dotRef.current, {
+        scale: 1,
+        duration: 0.45,
+        ease: "power2.out",
+      });
+    }
+    if (trailRef.current) {
+      gsap.to(trailRef.current, {
+        scale: 1,
+        opacity: 0.03,
+        duration: 0.45,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -197,26 +235,46 @@ export function CustomCursor() {
       {/* Soft trail glow */}
       <div
         ref={trailRef}
-        className="fixed top-0 left-0 w-[60px] h-[60px] rounded-full pointer-events-none z-[9999] mix-blend-difference"
+        className="fixed w-[60px] h-[60px] rounded-full pointer-events-none z-[9999] mix-blend-difference"
         style={{
           opacity: 0,
-          background: "radial-gradient(circle, rgba(245,245,245,0.12) 0%, transparent 70%)",
+          top: 0,
+          left: 0,
+          marginLeft: "-30px",
+          marginTop: "-30px",
+          background:
+            "radial-gradient(circle, rgba(245,245,245,0.12) 0%, transparent 70%)",
+          willChange: "left, top, transform, opacity",
+          transition: "opacity 0.4s ease",
         }}
       />
       {/* Small center dot */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-foreground pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
-        style={{ opacity: 0 }}
+        className="fixed w-2 h-2 rounded-full bg-foreground pointer-events-none z-[9999] mix-blend-difference"
+        style={{
+          opacity: 0,
+          top: 0,
+          left: 0,
+          marginLeft: "-4px",
+          marginTop: "-4px",
+          willChange: "left, top, transform, opacity",
+          transition: "opacity 0.4s ease",
+        }}
       />
       {/* Outer ring */}
       <div
         ref={ringRef}
-        className="fixed top-0 left-0 w-10 h-10 rounded-full pointer-events-none z-[9999]"
+        className="fixed w-10 h-10 rounded-full pointer-events-none z-[9999]"
         style={{
           opacity: 0,
+          top: 0,
+          left: 0,
+          marginLeft: "-20px",
+          marginTop: "-20px",
           border: "1.5px solid rgba(245, 245, 245, 0.15)",
-          willChange: "transform",
+          willChange: "left, top, transform, opacity",
+          transition: "opacity 0.4s ease",
         }}
       />
     </>

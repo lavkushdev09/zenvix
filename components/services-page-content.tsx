@@ -186,7 +186,7 @@ export function ServicesPageContent() {
     <div ref={heroRef}>
       {/* Hero */}
       <section className="relative min-h-[60vh] flex flex-col justify-center grain">
-        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-16">
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-16 text-center">
           <h1
             className="font-display text-5xl sm:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[0.95] text-foreground"
             style={{ perspective: "1000px" }}
@@ -210,7 +210,7 @@ export function ServicesPageContent() {
           </h1>
           <p
             ref={descRef}
-            className="mt-8 text-lg lg:text-xl leading-relaxed text-muted-foreground max-w-2xl"
+            className="mt-8 text-lg lg:text-xl leading-relaxed text-muted-foreground max-w-2xl mx-auto"
             style={{ opacity: 0 }}
           >
             We combine deep technical expertise with design thinking to deliver
@@ -328,6 +328,7 @@ export function ServicesPageContent() {
             subtitle="How We Work"
             title="Our Process"
             description="A proven approach that combines strategy, design, and engineering to deliver exceptional digital products."
+            align="center"
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

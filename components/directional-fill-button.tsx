@@ -4,58 +4,12 @@ import React, { useRef, useCallback, useState } from "react";
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
 
-type Direction =
-  | "top"
-  | "top-right"
-  | "right"
-  | "bottom-right"
-  | "bottom"
-  | "bottom-left"
-  | "left"
-  | "top-left";
-
 interface DirectionalFillButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: "primary" | "outline";
   size?: "default" | "lg";
   href?: string;
-}
-
-function getEntryDirection(e: React.MouseEvent, rect: DOMRect): Direction {
-  const x = e.clientX - rect.left - rect.width / 2;
-  const y = e.clientY - rect.top - rect.height / 2;
-  const angle = Math.atan2(y, x) * (180 / Math.PI);
-
-  if (angle >= -22.5 && angle < 22.5) return "right";
-  if (angle >= 22.5 && angle < 67.5) return "bottom-right";
-  if (angle >= 67.5 && angle < 112.5) return "bottom";
-  if (angle >= 112.5 && angle < 157.5) return "bottom-left";
-  if (angle >= -67.5 && angle < -22.5) return "top-right";
-  if (angle >= -112.5 && angle < -67.5) return "top";
-  if (angle >= -157.5 && angle < -112.5) return "top-left";
-  return "left";
-}
-
-function getOffset(direction: Direction) {
-  switch (direction) {
-    case "top":
-      return { x: "0%", y: "-110%" };
-    case "top-right":
-      return { x: "110%", y: "-110%" };
-    case "right":
-      return { x: "110%", y: "0%" };
-    case "bottom-right":
-      return { x: "110%", y: "110%" };
-    case "bottom":
-      return { x: "0%", y: "110%" };
-    case "bottom-left":
-      return { x: "-110%", y: "110%" };
-    case "left":
-      return { x: "-110%", y: "0%" };
-    case "top-left":
-      return { x: "-110%", y: "-110%" };
-  }
 }
 
 export function DirectionalFillButton({
@@ -74,18 +28,40 @@ export function DirectionalFillButton({
   const handleMouseEnter = useCallback((e: React.MouseEvent) => {
     if (!btnRef.current || !fillRef.current) return;
     const rect = btnRef.current.getBoundingClientRect();
-    const direction = getEntryDirection(e, rect);
-    const offset = getOffset(direction);
+
+    // Get cursor entry position relative to button (as percentage)
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xPct = (x / rect.width) * 100;
+    const yPct = (y / rect.height) * 100;
+
+    // Calculate max distance from entry point to any corner (for full coverage)
+    const maxDist = Math.max(
+      Math.hypot(x, y),
+      Math.hypot(rect.width - x, y),
+      Math.hypot(x, rect.height - y),
+      Math.hypot(rect.width - x, rect.height - y)
+    );
+    // Convert to percentage of the larger dimension for circle radius
+    const maxRadius = (maxDist / Math.max(rect.width, rect.height)) * 150;
 
     setIsHovered(true);
     gsap.killTweensOf(fillRef.current);
-    gsap.set(fillRef.current, { x: offset.x, y: offset.y });
-    gsap.to(fillRef.current, {
-      x: "0%",
-      y: "0%",
-      duration: 0.5,
-      ease: "power3.out",
-    });
+
+    // Position the fill circle at cursor entry point
+    fillRef.current.style.setProperty("--fill-x", `${xPct}%`);
+    fillRef.current.style.setProperty("--fill-y", `${yPct}%`);
+
+    // Animate clip-path circle from 0 to full coverage
+    gsap.fromTo(
+      fillRef.current,
+      { clipPath: `circle(0% at ${xPct}% ${yPct}%)` },
+      {
+        clipPath: `circle(${maxRadius}% at ${xPct}% ${yPct}%)`,
+        duration: 0.5,
+        ease: "power3.out",
+      }
+    );
 
     // Subtle text lift
     if (textRef.current) {
@@ -97,29 +73,44 @@ export function DirectionalFillButton({
     }
   }, []);
 
-  const handleMouseLeave = useCallback((e: React.MouseEvent) => {
-    if (!btnRef.current || !fillRef.current) return;
-    const rect = btnRef.current.getBoundingClientRect();
-    const direction = getEntryDirection(e, rect);
-    const offset = getOffset(direction);
+  const handleMouseLeave = useCallback(
+    (e: React.MouseEvent) => {
+      if (!btnRef.current || !fillRef.current) return;
+      const rect = btnRef.current.getBoundingClientRect();
 
-    setIsHovered(false);
-    gsap.killTweensOf(fillRef.current);
-    gsap.to(fillRef.current, {
-      x: offset.x,
-      y: offset.y,
-      duration: 0.45,
-      ease: "power3.in",
-    });
+      // Get cursor exit position
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xPct = (x / rect.width) * 100;
+      const yPct = (y / rect.height) * 100;
 
-    if (textRef.current) {
-      gsap.to(textRef.current, {
-        y: 0,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    }
-  }, []);
+      setIsHovered(false);
+      gsap.killTweensOf(fillRef.current);
+
+      // Get current clip-path to animate from
+      const computed = getComputedStyle(fillRef.current).clipPath;
+
+      // Animate circle shrinking toward exit point
+      gsap.fromTo(
+        fillRef.current,
+        { clipPath: computed || `circle(150% at 50% 50%)` },
+        {
+          clipPath: `circle(0% at ${xPct}% ${yPct}%)`,
+          duration: 0.45,
+          ease: "power3.in",
+        }
+      );
+
+      if (textRef.current) {
+        gsap.to(textRef.current, {
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      }
+    },
+    []
+  );
 
   const isPrimary = variant === "primary";
 
@@ -135,7 +126,7 @@ export function DirectionalFillButton({
   );
 
   const fillClasses = cn(
-    "absolute inset-0 pointer-events-none",
+    "absolute inset-0 pointer-events-none rounded-full",
     isPrimary ? "bg-background" : "bg-foreground"
   );
 
@@ -152,7 +143,7 @@ export function DirectionalFillButton({
       <span
         ref={fillRef}
         className={fillClasses}
-        style={{ transform: "translateX(-110%) translateY(0%)" }}
+        style={{ clipPath: "circle(0% at 50% 50%)" }}
       />
       <span
         ref={textRef}

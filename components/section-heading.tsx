@@ -17,7 +17,7 @@ export function SectionHeading({
   subtitle,
   title,
   description,
-  align = "left",
+  align = "center",
 }: SectionHeadingProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -62,6 +62,11 @@ export function SectionHeading({
           {description}
         </p>
       )}
+      <div
+        className={`mt-6 h-px bg-border ${
+          align === "center" ? "w-16 mx-auto" : "w-16"
+        }`}
+      />
     </div>
   );
 }

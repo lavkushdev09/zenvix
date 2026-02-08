@@ -292,6 +292,7 @@ export function WorkSection({
           subtitle="Selected Work"
           title={sectionTitle}
           description={`${sectionDescription} (${String(projects.length).padStart(2, "0")} projects)`}
+          align="center"
         />
         <div
           ref={lineRef}
