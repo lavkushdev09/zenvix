@@ -7,10 +7,12 @@ import { ContactSection } from "@/components/contact-section";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { TechMarquee } from "@/components/tech-marquee";
+import { CustomCursor } from "@/components/custom-cursor";
 
 export default function Page() {
   return (
     <>
+      <CustomCursor />
       <Header
         companyName={content.company.name}
         navigation={content.navigation}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -15,16 +15,62 @@ interface Technology {
 
 export function TechMarquee({ technologies }: { technologies: Technology[] }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
   const track1Ref = useRef<HTMLDivElement>(null);
   const track2Ref = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLDivElement>(null);
+  const marquee1Ref = useRef<gsap.core.Tween | null>(null);
+  const marquee2Ref = useRef<gsap.core.Tween | null>(null);
 
-  // repeat list for smooth infinite scroll
-  const items = [...technologies, ...technologies, ...technologies];
+  // Duplicate items for seamless loop (triple for safety)
+  const row1 = [...technologies, ...technologies, ...technologies];
+  const row2 = [...technologies, ...technologies, ...technologies];
+
+  const setupMarquee = useCallback(() => {
+    if (!track1Ref.current || !track2Ref.current) return;
+
+    const cards1 = track1Ref.current.querySelectorAll(".tech-item");
+    if (cards1.length === 0) return;
+
+    // Calculate one set width
+    let setWidth = 0;
+    for (let i = 0; i < technologies.length; i++) {
+      const card = cards1[i] as HTMLElement;
+      if (card) setWidth += card.offsetWidth + 24; // 24px gap
+    }
+
+    if (marquee1Ref.current) marquee1Ref.current.kill();
+    if (marquee2Ref.current) marquee2Ref.current.kill();
+
+    // Row 1: scroll left
+    marquee1Ref.current = gsap.to(track1Ref.current, {
+      x: -setWidth,
+      duration: 35,
+      repeat: -1,
+      ease: "none",
+      modifiers: {
+        x: gsap.utils.unitize((x: number) => parseFloat(String(x)) % setWidth),
+      },
+    });
+
+    // Row 2: scroll right (reversed)
+    gsap.set(track2Ref.current, { x: -setWidth });
+    marquee2Ref.current = gsap.to(track2Ref.current, {
+      x: 0,
+      duration: 40,
+      repeat: -1,
+      ease: "none",
+      modifiers: {
+        x: gsap.utils.unitize((x: number) => {
+          const val = parseFloat(String(x)) % setWidth;
+          return val > 0 ? val - setWidth : val;
+        }),
+      },
+    });
+  }, [technologies.length]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Section heading reveal
+      // Heading fade in
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top 85%",
@@ -38,62 +84,50 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
         },
       });
 
-      // Marquee animations
-      if (track1Ref.current) {
-        gsap.to(track1Ref.current, {
-          xPercent: -33.333,
-          duration: 40,
-          repeat: -1,
-          ease: "none",
-        });
-      }
-
-      if (track2Ref.current) {
-        gsap.fromTo(
-          track2Ref.current,
-          { xPercent: -33.333 },
-          {
-            xPercent: 0,
-            duration: 40,
-            repeat: -1,
-            ease: "none",
-          }
-        );
-      }
+      setupMarquee();
     }, sectionRef);
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      ctx.revert();
+      if (marquee1Ref.current) marquee1Ref.current.kill();
+      if (marquee2Ref.current) marquee2Ref.current.kill();
+    };
+  }, [setupMarquee]);
 
   return (
-    <section ref={sectionRef} className="py-20 lg:py-28 overflow-hidden">
-      {/* Heading */}
-      <div
-        ref={labelRef}
-        className="mx-auto mb-12 max-w-[1400px] px-6 lg:px-12 opacity-0"
-      >
-        <SectionHeading
-          subtitle="Our Stack"
-          title="Technologies We Work With"
-          description="We leverage cutting-edge tools and frameworks to build robust, scalable solutions for every challenge."
-          align="center"
-        />
+    <section
+      ref={sectionRef}
+      className="py-24 lg:py-32 overflow-hidden border-t border-border"
+    >
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <div ref={labelRef} className="mb-16 opacity-0">
+          <SectionHeading
+            subtitle="Our Stack"
+            title="Technologies We Work With"
+            description="We leverage cutting-edge tools and frameworks to build robust, scalable solutions for every challenge."
+            align="center"
+          />
+        </div>
       </div>
 
-      {/* Track 1 */}
-      <div className="mb-4 overflow-hidden">
-        <div ref={track1Ref} className="flex w-max items-center gap-4">
-          {items.map((tech, i) => (
-            <TechPill key={`t1-${i}`} tech={tech} />
+      {/* Row 1 - scrolling left */}
+      <div className="relative mb-6">
+        <div className="absolute left-0 top-0 bottom-0 w-24 lg:w-40 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-40 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
+        <div ref={track1Ref} className="flex items-center gap-6 w-max">
+          {row1.map((tech, i) => (
+            <TechItem key={`r1-${tech.name}-${i}`} tech={tech} />
           ))}
         </div>
       </div>
 
-      {/* Track 2 */}
-      <div className="overflow-hidden">
-        <div ref={track2Ref} className="flex w-max items-center gap-4">
-          {[...items].reverse().map((tech, i) => (
-            <TechPill key={`t2-${i}`} tech={tech} />
+      {/* Row 2 - scrolling right */}
+      <div className="relative">
+        <div className="absolute left-0 top-0 bottom-0 w-24 lg:w-40 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 lg:w-40 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
+        <div ref={track2Ref} className="flex items-center gap-6 w-max">
+          {row2.map((tech, i) => (
+            <TechItem key={`r2-${tech.name}-${i}`} tech={tech} />
           ))}
         </div>
       </div>
@@ -101,23 +135,18 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
   );
 }
 
-/* ---------------------------- */
-/* Tech Pill */
-/* ---------------------------- */
-
-function TechPill({ tech }: { tech: Technology }) {
+function TechItem({ tech }: { tech: Technology }) {
   return (
-    <div className="group flex items-center gap-3 rounded-full border border-border bg-card px-6 py-3.5 whitespace-nowrap transition-all duration-300 hover:bg-accent hover:border-foreground/20">
-      <div className="relative h-5 w-5">
+    <div className="tech-item flex-shrink-0 flex items-center gap-4 px-6 py-4 rounded-2xl border border-[hsl(0,0%,12%)] bg-[hsl(0,0%,4%)] hover:border-[hsl(0,0%,22%)] hover:bg-[hsl(0,0%,6%)] transition-all duration-300 cursor-default group">
+      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-[hsl(0,0%,8%)] border border-[hsl(0,0%,14%)] flex-shrink-0 group-hover:border-[hsl(0,0%,22%)] transition-colors duration-300">
         <Image
           src={tech.icon}
           alt={tech.name}
           fill
-          className="object-contain opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110"
+          className="object-contain p-1.5 opacity-80 group-hover:opacity-100 transition-opacity duration-300"
         />
       </div>
-
-      <span className="text-sm font-medium text-foreground">
+      <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 whitespace-nowrap tracking-wide">
         {tech.name}
       </span>
     </div>

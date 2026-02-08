@@ -35,6 +35,7 @@
     --chart-4: 0 0% 35%;
     --chart-5: 0 0% 20%;
     --radius: 0.5rem;
+
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 0 0% 98%;
@@ -101,6 +102,36 @@ html {
 }
 
 .animate-floor {
-  /* speed from 1.5s to 0.5s (3x faster) */
   animation: moveFloor 0.5s linear infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(0 0% 0%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(0 0% 20%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(0 0% 35%);
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(0 0% 20%) hsl(0 0% 0%);
+}
+
+/* Hide default cursor site-wide on desktop */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
 }
