@@ -99,9 +99,9 @@ export function ContactPageContent({ contact }: ContactPageContentProps) {
     <div ref={heroRef}>
       {/* Hero */}
       <section className="relative grain">
-        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-16">
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12 pt-28 sm:pt-32 pb-12 sm:pb-16">
           <h1
-            className="font-display text-5xl sm:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[0.95] text-foreground"
+            className="font-display text-3xl sm:text-5xl lg:text-[5.5rem] font-bold tracking-tight leading-[1.1] sm:leading-[0.95] text-foreground"
             style={{ perspective: "1000px" }}
           >
             {words.map((word, i) => (
@@ -122,15 +122,15 @@ export function ContactPageContent({ contact }: ContactPageContentProps) {
             ))}
           </h1>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 px-6 lg:px-12">
+        <div className="absolute bottom-0 left-0 right-0 px-5 sm:px-6 lg:px-12">
           <div className="h-px bg-border" />
         </div>
       </section>
 
       {/* Contact form + info */}
-      <section className="py-24 lg:py-32">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 lg:gap-24">
+      <section className="py-16 sm:py-24 lg:py-32">
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-24">
             {/* Left side - info */}
             <div
               ref={infoRef}

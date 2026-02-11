@@ -80,7 +80,7 @@ export function ContactSection({ contact }: ContactProps) {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative overflow-hidden py-20 lg:py-28"
+      className="relative overflow-hidden py-16 sm:py-20 lg:py-28"
     >
       {/* Monochromatic perspective grid floor */}
       <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
@@ -103,25 +103,25 @@ export function ContactSection({ contact }: ContactProps) {
         />
       </div>
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12">
         {/* Top line */}
         <div
           ref={lineRef}
-          className="h-px bg-border origin-left mb-12"
+          className="h-px bg-border origin-left mb-8 sm:mb-12"
           style={{ transform: "scaleX(0)" }}
         />
 
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 lg:gap-12">
           {/* Left content */}
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border text-xs tracking-widest uppercase text-muted-foreground mb-8">
-              <Mail className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full border border-border text-[10px] sm:text-xs tracking-widest uppercase text-muted-foreground mb-6 sm:mb-8">
+              <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               Get in touch
             </span>
 
             <h2
               ref={headlineRef}
-              className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground tracking-tight leading-[1.05] text-balance"
+              className="font-display text-3xl sm:text-5xl lg:text-7xl font-bold text-foreground tracking-tight leading-[1.1] sm:leading-[1.05] text-balance"
               style={{ opacity: 0 }}
             >
               {contact.headline}
@@ -129,7 +129,7 @@ export function ContactSection({ contact }: ContactProps) {
 
             <p
               ref={descRef}
-              className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-xl"
+              className="mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg text-muted-foreground leading-relaxed max-w-xl"
               style={{ opacity: 0 }}
             >
               {contact.description}
@@ -137,7 +137,7 @@ export function ContactSection({ contact }: ContactProps) {
 
             <div
               ref={ctaRef}
-              className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-6"
+              className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6"
               style={{ opacity: 0 }}
             >
               <DirectionalFillButton
@@ -150,16 +150,16 @@ export function ContactSection({ contact }: ContactProps) {
               </DirectionalFillButton>
               <a
                 href={`mailto:${contact.email}`}
-                className="group inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm"
+                className="group inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300 text-xs sm:text-sm break-all sm:break-normal"
               >
-                <span className="w-8 h-px bg-border group-hover:bg-foreground group-hover:w-12 transition-all duration-300" />
+                <span className="w-6 sm:w-8 h-px bg-border group-hover:bg-foreground group-hover:w-10 sm:group-hover:w-12 transition-all duration-300 flex-shrink-0" />
                 {contact.email}
               </a>
             </div>
           </div>
 
           {/* Right stats */}
-          <div ref={statsRef} className="flex flex-row lg:flex-col gap-8 lg:gap-10">
+          <div ref={statsRef} className="grid grid-cols-3 lg:grid-cols-1 gap-6 lg:gap-10">
             {[
               { value: "50+", label: "Projects Delivered" },
               { value: "98%", label: "Client Satisfaction" },
@@ -170,10 +170,10 @@ export function ContactSection({ contact }: ContactProps) {
                 className="group"
                 style={{ opacity: 0 }}
               >
-                <div className="text-3xl lg:text-4xl font-bold text-foreground font-display tracking-tight group-hover:tracking-wide transition-all duration-500">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground font-display tracking-tight group-hover:tracking-wide transition-all duration-500">
                   {stat.value}
                 </div>
-                <div className="text-xs text-muted-foreground mt-1 tracking-wider uppercase">
+                <div className="text-[10px] sm:text-xs text-muted-foreground mt-1 tracking-wider uppercase">
                   {stat.label}
                 </div>
               </div>

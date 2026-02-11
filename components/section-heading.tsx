@@ -43,19 +43,19 @@ export function SectionHeading({
   return (
     <div
       ref={containerRef}
-      className={`mb-16 ${align === "center" ? "text-center" : ""}`}
+      className={`mb-10 sm:mb-16 ${align === "center" ? "text-center" : ""}`}
       style={{ opacity: 0 }}
     >
-      <span className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-muted-foreground">
-        <span className="inline-block w-8 h-px bg-muted-foreground/50" />
+      <span className="inline-flex items-center gap-2 text-[10px] sm:text-xs tracking-widest uppercase text-muted-foreground">
+        <span className="inline-block w-6 sm:w-8 h-px bg-muted-foreground/50" />
         {subtitle}
       </span>
-      <h2 className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight text-balance">
+      <h2 className="mt-3 sm:mt-4 font-display text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight text-balance">
         {title}
       </h2>
       {description && (
         <p
-          className={`mt-5 text-lg text-muted-foreground leading-relaxed ${
+          className={`mt-4 sm:mt-5 text-sm sm:text-base lg:text-lg text-muted-foreground leading-relaxed ${
             align === "center" ? "max-w-2xl mx-auto" : "max-w-xl"
           }`}
         >
@@ -63,8 +63,8 @@ export function SectionHeading({
         </p>
       )}
       <div
-        className={`mt-6 h-px bg-border ${
-          align === "center" ? "w-16 mx-auto" : "w-16"
+        className={`mt-4 sm:mt-6 h-px bg-border ${
+          align === "center" ? "w-12 sm:w-16 mx-auto" : "w-12 sm:w-16"
         }`}
       />
     </div>

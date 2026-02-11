@@ -185,10 +185,10 @@ export function ServicesPageContent() {
   return (
     <div ref={heroRef}>
       {/* Hero */}
-      <section className="relative min-h-[60vh] flex flex-col justify-center grain">
-        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-16 text-center">
+      <section className="relative min-h-[50vh] sm:min-h-[60vh] flex flex-col justify-center grain">
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12 pt-28 sm:pt-32 pb-12 sm:pb-16 text-center">
           <h1
-            className="font-display text-5xl sm:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[0.95] text-foreground"
+            className="font-display text-3xl sm:text-5xl lg:text-[5.5rem] font-bold tracking-tight leading-[1.1] sm:leading-[0.95] text-foreground"
             style={{ perspective: "1000px" }}
           >
             {words.map((word, i) => (
@@ -210,7 +210,7 @@ export function ServicesPageContent() {
           </h1>
           <p
             ref={descRef}
-            className="mt-8 text-lg lg:text-xl leading-relaxed text-muted-foreground max-w-2xl mx-auto"
+            className="mt-6 sm:mt-8 text-sm sm:text-base lg:text-xl leading-relaxed text-muted-foreground max-w-2xl mx-auto px-2 sm:px-0"
             style={{ opacity: 0 }}
           >
             We combine deep technical expertise with design thinking to deliver
@@ -223,22 +223,22 @@ export function ServicesPageContent() {
       </section>
 
       {/* Interactive Services Section */}
-      <section className="py-24 lg:py-32">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <section className="py-16 sm:py-24 lg:py-32">
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12">
           {/* Service navigation tabs */}
-          <div className="flex flex-wrap gap-3 mb-16">
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-10 sm:mb-16">
             {services.map((service, i) => (
               <button
                 key={service.title}
                 onClick={() => setActiveService(i)}
-                className={`flex items-center gap-3 px-6 py-3 rounded-full text-sm font-medium transition-all duration-400 border ${
+                className={`flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-medium transition-all duration-400 border ${
                   activeService === i
                     ? "border-foreground/30 bg-foreground/5 text-foreground"
                     : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/20"
                 }`}
               >
                 <span
-                  className={`w-2 h-2 rounded-full transition-all duration-400 ${
+                  className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-400 flex-shrink-0 ${
                     activeService === i
                       ? "bg-foreground shadow-[0_0_8px_rgba(255,255,255,0.3)]"
                       : "bg-muted-foreground"
@@ -250,16 +250,16 @@ export function ServicesPageContent() {
           </div>
 
           {/* Active service detail */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
             {/* Left: Service info */}
             <div className="lg:col-span-5">
-              <div className="w-14 h-14 rounded-2xl border border-border flex items-center justify-center mb-8 text-foreground transition-all duration-500">
+              <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl border border-border flex items-center justify-center mb-6 sm:mb-8 text-foreground transition-all duration-500">
                 {services[activeService].icon}
               </div>
-              <h3 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4 tracking-tight">
+              <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3 sm:mb-4 tracking-tight">
                 {services[activeService].title}
               </h3>
-              <p className="text-muted-foreground leading-relaxed text-lg mb-8">
+              <p className="text-sm sm:text-base lg:text-lg text-muted-foreground leading-relaxed mb-6 sm:mb-8">
                 {services[activeService].description}
               </p>
               <DirectionalFillButton variant="outline" href="/#contact">
@@ -287,14 +287,14 @@ export function ServicesPageContent() {
           </div>
 
           {/* All services overview cards */}
-          <div className="mt-24 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {services.map((service, i) => (
               <div
                 key={service.title}
                 ref={(el) => {
                   cardsRef.current[i] = el;
                 }}
-                className="group relative rounded-2xl border border-border p-8 bg-card transition-all duration-500 hover:border-foreground/20 overflow-hidden"
+                className="group relative rounded-2xl border border-border p-5 sm:p-8 bg-card transition-all duration-500 hover:border-foreground/20 overflow-hidden"
                 style={{ opacity: 0 }}
                 onMouseEnter={() => setActiveService(i)}
               >
@@ -322,8 +322,8 @@ export function ServicesPageContent() {
       </section>
 
       {/* Process */}
-      <section ref={processRef} className="py-24 lg:py-32 border-t border-border">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <section ref={processRef} className="py-16 sm:py-24 lg:py-32 border-t border-border">
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12">
           <SectionHeading
             subtitle="How We Work"
             title="Our Process"
@@ -331,14 +331,14 @@ export function ServicesPageContent() {
             align="center"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {processSteps.map((item, i) => (
               <div
                 key={item.step}
                 ref={(el) => {
                   stepsRef.current[i] = el;
                 }}
-                className="group relative rounded-2xl border border-border bg-card p-8 lg:p-10 hover:border-foreground/20 transition-all duration-500 overflow-hidden"
+                className="group relative rounded-2xl border border-border bg-card p-6 sm:p-8 lg:p-10 hover:border-foreground/20 transition-all duration-500 overflow-hidden"
                 style={{ opacity: 0 }}
               >
                 <span className="absolute -top-4 -right-2 font-display text-[6rem] font-bold text-foreground/[0.03] group-hover:text-foreground/[0.06] transition-colors duration-500 leading-none select-none">

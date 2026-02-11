@@ -79,9 +79,9 @@ export function ServicesSection({ services }: { services: Service[] }) {
     <section
       ref={sectionRef}
       id="services"
-      className="py-24 lg:py-32 border-t border-border"
+      className="py-16 sm:py-24 lg:py-32 border-t border-border"
     >
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12">
         <SectionHeading
           subtitle="What We Do"
           title="Services"
@@ -114,30 +114,30 @@ export function ServicesSection({ services }: { services: Service[] }) {
                 {/* Hover glow */}
                 <div className="absolute inset-0 bg-foreground/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-                <div className="relative p-8 lg:p-10">
-                  <div className="flex items-center justify-between mb-8">
-                    <span className="text-xs font-mono text-muted-foreground/40 tracking-widest">
+                <div className="relative p-5 sm:p-8 lg:p-10">
+                  <div className="flex items-center justify-between mb-6 sm:mb-8">
+                    <span className="text-[10px] sm:text-xs font-mono text-muted-foreground/40 tracking-widest">
                       {data.number}
                     </span>
-                    <div className="w-14 h-14 rounded-2xl border border-border bg-background flex items-center justify-center text-muted-foreground group-hover:text-foreground group-hover:border-foreground/20 transition-all duration-500">
+                    <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl border border-border bg-background flex items-center justify-center text-muted-foreground group-hover:text-foreground group-hover:border-foreground/20 transition-all duration-500">
                       {data.icon}
                     </div>
                   </div>
 
-                  <h3 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-3 flex items-center gap-3">
+                  <h3 className="font-display text-lg sm:text-2xl lg:text-3xl font-bold text-foreground mb-2 sm:mb-3 flex items-center gap-2 sm:gap-3">
                     {service.title}
-                    <ArrowUpRight className="w-5 h-5 text-muted-foreground/30 group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-500" />
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground/30 group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-500 flex-shrink-0" />
                   </h3>
 
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-8 max-w-md">
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6 sm:mb-8 max-w-md">
                     {service.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {data.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-3 py-1.5 text-xs rounded-full border border-border text-muted-foreground group-hover:border-foreground/15 group-hover:text-foreground/70 transition-all duration-500"
+                        className="px-2.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs rounded-full border border-border text-muted-foreground group-hover:border-foreground/15 group-hover:text-foreground/70 transition-all duration-500"
                       >
                         {tag}
                       </span>

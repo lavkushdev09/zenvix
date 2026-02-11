@@ -92,10 +92,10 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
   return (
     <section
       ref={sectionRef}
-      className="py-24 lg:py-32 overflow-hidden border-t border-border"
+      className="py-16 sm:py-24 lg:py-32 overflow-hidden border-t border-border"
     >
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div ref={labelRef} className="mb-16 opacity-0">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12">
+        <div ref={labelRef} className="mb-10 sm:mb-16 opacity-0">
           <SectionHeading
             subtitle="Our Stack"
             title="Technologies We Work With"
@@ -132,16 +132,16 @@ export function TechMarquee({ technologies }: { technologies: Technology[] }) {
 
 function TechItem({ tech }: { tech: Technology }) {
   return (
-    <div className="tech-item flex-shrink-0 flex items-center gap-4 px-6 py-4 rounded-2xl border border-border bg-card hover:border-foreground/20 hover:bg-secondary transition-all duration-300 cursor-default group">
-      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-secondary border border-border flex-shrink-0 group-hover:border-foreground/20 transition-colors duration-300">
+    <div className="tech-item flex-shrink-0 flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border border-border bg-card hover:border-foreground/20 hover:bg-secondary transition-all duration-300 cursor-default group">
+      <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden bg-secondary border border-border flex-shrink-0 group-hover:border-foreground/20 transition-colors duration-300">
         <Image
           src={tech.icon}
           alt={tech.name}
           fill
-          className="object-contain p-1.5 opacity-70 group-hover:opacity-100 transition-opacity duration-300"
+          className="object-contain p-1 sm:p-1.5 opacity-70 group-hover:opacity-100 transition-opacity duration-300"
         />
       </div>
-      <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 whitespace-nowrap tracking-wide">
+      <span className="text-xs sm:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300 whitespace-nowrap tracking-wide">
         {tech.name}
       </span>
     </div>

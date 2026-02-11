@@ -124,9 +124,9 @@ export function ProjectPageClient({ project, contactCta }: Props) {
   }, []);
 
   return (
-    <div className="pt-28 pb-24">
+    <div className="pt-24 sm:pt-28 pb-16 sm:pb-24">
       {/* Back link */}
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 mb-12">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12 mb-8 sm:mb-12">
         <Link
           href="/work"
           className="group inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
@@ -139,10 +139,10 @@ export function ProjectPageClient({ project, contactCta }: Props) {
       {/* Hero */}
       <div
         ref={heroRef}
-        className="max-w-[1400px] mx-auto px-6 lg:px-12"
+        className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12"
         style={{ opacity: 0 }}
       >
-        <div className="flex flex-wrap items-center gap-3 mb-6">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
           <span className="px-3 py-1 rounded-full border border-border text-xs tracking-wider uppercase text-muted-foreground">
             {project.category}
           </span>

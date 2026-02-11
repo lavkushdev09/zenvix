@@ -263,10 +263,10 @@ export function WorkPageContent({ projects }: WorkPageContentProps) {
   return (
     <section ref={sectionRef} className="min-h-screen">
       {/* Hero area */}
-      <div className="pt-32 pb-16 border-b border-border">
+      <div className="pt-28 sm:pt-32 pb-12 sm:pb-16 border-b border-border">
         <div
           ref={heroRef}
-          className="max-w-[1400px] mx-auto px-6 lg:px-12"
+          className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12"
           style={{ opacity: 0 }}
         >
           <SectionHeading
@@ -276,20 +276,20 @@ export function WorkPageContent({ projects }: WorkPageContentProps) {
           />
 
           {/* Stats row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mt-8 sm:mt-12">
             {stats.map((stat, i) => (
               <div
                 key={stat.label}
                 ref={(el) => {
                   statsRef.current[i] = el;
                 }}
-                className="group p-6 rounded-xl border border-border bg-card hover:border-foreground/20 transition-all duration-500"
+                className="group p-4 sm:p-6 rounded-xl border border-border bg-card hover:border-foreground/20 transition-all duration-500"
                 style={{ opacity: 0 }}
               >
-                <p className="font-display text-3xl lg:text-4xl font-bold text-foreground group-hover:tracking-wide transition-all duration-500">
+                <p className="font-display text-xl sm:text-3xl lg:text-4xl font-bold text-foreground group-hover:tracking-wide transition-all duration-500">
                   {stat.value}
                 </p>
-                <p className="mt-2 text-xs text-muted-foreground tracking-wider uppercase">
+                <p className="mt-1 sm:mt-2 text-[10px] sm:text-xs text-muted-foreground tracking-wider uppercase">
                   {stat.label}
                 </p>
               </div>
@@ -299,18 +299,18 @@ export function WorkPageContent({ projects }: WorkPageContentProps) {
       </div>
 
       {/* Filter + Grid */}
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-16 lg:py-24">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12 py-12 sm:py-16 lg:py-24">
         {/* Category filter */}
         <div
           ref={filterRef}
-          className="flex flex-wrap items-center gap-2 mb-12"
+          className="flex flex-wrap items-center gap-2 mb-8 sm:mb-12"
           style={{ opacity: 0 }}
         >
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveFilter(cat)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 border ${
                 activeFilter === cat
                   ? "bg-foreground text-background border-foreground"
                   : "bg-transparent text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground"
@@ -322,7 +322,7 @@ export function WorkPageContent({ projects }: WorkPageContentProps) {
         </div>
 
         {/* Masonry-style grid */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {filteredProjects.map((project, i) => (
             <div
               key={project.slug}

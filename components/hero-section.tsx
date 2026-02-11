@@ -80,6 +80,12 @@ export function HeroSection({ hero }: HeroProps) {
   const headlineWithoutLast = hero.headline.replace(/\s+\S+$/, "");
   const words = headlineWithoutLast.split(" ");
 
+  // Calculate the longest rotating word for stable min-width
+  const longestWord = ROTATING_WORDS.reduce(
+    (a, b) => (a.length > b.length ? a : b),
+    ""
+  );
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -288,7 +294,8 @@ export function HeroSection({ hero }: HeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col items-center justify-center grain"
+      className="relative flex flex-col items-center justify-center grain overflow-hidden"
+      style={{ minHeight: "100svh" }}
     >
       {/* Grid background */}
       <div className="absolute z-[1] inset-0 bg-[linear-gradient(to_right,hsl(0_0%_10%)_1px,transparent_1px),linear-gradient(to_bottom,hsl(0_0%_10%)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_40%,transparent_100%)]" />
@@ -300,22 +307,22 @@ export function HeroSection({ hero }: HeroProps) {
       />
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-24 flex flex-col items-center text-center">
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12 pt-28 sm:pt-32 pb-20 sm:pb-24 flex flex-col items-center text-center">
         {/* Badge */}
-        <div ref={badgeRef} className="mb-10" style={{ opacity: 0 }}>
-          <span className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full border border-border text-xs tracking-widest uppercase text-muted-foreground">
-            <span className="w-1.5 h-1.5 rounded-full bg-foreground animate-pulse" />
+        <div ref={badgeRef} className="mb-8 sm:mb-10" style={{ opacity: 0 }}>
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-[10px] sm:text-xs tracking-widest uppercase text-muted-foreground">
+            <span className="w-1.5 h-1.5 rounded-full bg-foreground animate-pulse flex-shrink-0" />
             Digital Solutions Studio
           </span>
         </div>
 
         {/* Headline */}
         <h1
-          className="font-display text-5xl sm:text-7xl lg:text-[5.5rem] xl:text-[7rem] font-bold tracking-tight leading-[0.95] text-foreground"
+          className="font-display text-[2rem] sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-bold tracking-tight leading-[1] sm:leading-[0.95] text-foreground max-w-full"
           style={{ perspective: "1000px" }}
         >
           {words.map((word, i) => (
-            <span key={i} className="inline-block overflow-hidden mr-[0.25em]">
+            <span key={i} className="inline-block overflow-hidden mr-[0.2em] sm:mr-[0.25em]">
               <span
                 ref={(el) => {
                   wordsRef.current[i] = el;
@@ -327,18 +334,25 @@ export function HeroSection({ hero }: HeroProps) {
               </span>
             </span>
           ))}
-          {/* Typewriter word - monochromatic */}
-          <span className="inline-block overflow-hidden">
+          {/* Typewriter word - contained to prevent layout shift */}
+          <span className="block overflow-hidden mt-2 sm:mt-3">
             <span
               ref={rotatingRef}
-              className="inline-block pb-1"
-              style={{ opacity: 0, minWidth: "3ch", borderBottom: "4px solid hsl(0 0% 96%)" }}
+              className="inline-block pb-1 border-b-2 sm:border-b-4 border-foreground"
+              style={{ opacity: 0 }}
             >
-              <span className="text-foreground">
+              {/* Invisible longest word to reserve stable width */}
+              <span className="invisible block h-0 overflow-hidden" aria-hidden="true">
+                {longestWord}
+              </span>
+              <span
+                className="text-foreground inline-block text-left"
+                style={{ minWidth: `${longestWord.length}ch`, maxWidth: "100%" }}
+              >
                 {displayText}
               </span>
               <span
-                className="inline-block w-[3px] h-[0.85em] ml-0.5 align-middle bg-foreground"
+                className="inline-block w-[2px] sm:w-[3px] h-[0.85em] ml-0.5 align-middle bg-foreground"
                 style={{
                   animation: "blink 1s step-end infinite",
                 }}
@@ -350,7 +364,7 @@ export function HeroSection({ hero }: HeroProps) {
         {/* Description */}
         <p
           ref={descRef}
-          className="mt-8 text-lg lg:text-xl leading-relaxed text-muted-foreground max-w-2xl"
+          className="mt-6 sm:mt-8 text-sm sm:text-base lg:text-xl leading-relaxed text-muted-foreground max-w-2xl px-2 sm:px-0"
           style={{ opacity: 0 }}
         >
           {hero.description}
@@ -359,7 +373,7 @@ export function HeroSection({ hero }: HeroProps) {
         {/* CTAs */}
         <div
           ref={ctaRef}
-          className="mt-12 flex flex-wrap items-center justify-center gap-4"
+          className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto"
           style={{ opacity: 0 }}
         >
           <DirectionalFillButton variant="primary" href={hero.primaryCta.href}>
@@ -376,7 +390,7 @@ export function HeroSection({ hero }: HeroProps) {
       </div>
 
       {/* Bottom line */}
-      <div className="absolute bottom-0 left-0 right-0 px-6 lg:px-12">
+      <div className="absolute bottom-0 left-0 right-0 px-5 sm:px-6 lg:px-12">
         <div
           ref={lineRef}
           className="h-px bg-border origin-center"

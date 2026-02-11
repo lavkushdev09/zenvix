@@ -48,7 +48,7 @@ export function Footer({ companyName, copyright }: FooterProps) {
   return (
     <footer ref={footerRef} className="relative">
       {/* Animated separator line */}
-      <div className="px-6 lg:px-12 max-w-[1400px] mx-auto">
+      <div className="px-5 sm:px-6 lg:px-12 max-w-[1400px] mx-auto">
         <div
           ref={lineRef}
           className="h-px bg-border origin-center"
@@ -58,20 +58,20 @@ export function Footer({ companyName, copyright }: FooterProps) {
 
       <div
         ref={contentRef}
-        className="max-w-[1400px] mx-auto px-6 lg:px-12 py-16 lg:py-20"
+        className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12 py-12 sm:py-16 lg:py-20"
         style={{ opacity: 0 }}
       >
         {/* Main footer content */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
+        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-8 lg:gap-12">
           {/* Brand side */}
           <div className="flex-1">
-            <Link href="/" className="group inline-flex items-center gap-3">
+            <Link href="/" className="group inline-flex items-center gap-2.5">
               <svg
-                width="24"
-                height="24"
+                width="22"
+                height="22"
                 viewBox="0 0 24 24"
                 fill="none"
-                className="text-foreground"
+                className="text-foreground flex-shrink-0"
               >
                 <path
                   d="M4 7h3l2-3h6l2 3h3a1 1 0 011 1v4a1 1 0 01-1 1h-2l-2 3H8l-2-3H4a1 1 0 01-1-1V8a1 1 0 011-1z"
@@ -84,17 +84,17 @@ export function Footer({ companyName, copyright }: FooterProps) {
                   strokeLinecap="round"
                 />
               </svg>
-              <span className="font-display text-xl font-bold text-foreground tracking-tight group-hover:text-muted-foreground transition-colors duration-300">
+              <span className="font-display text-lg sm:text-xl font-bold text-foreground tracking-tight group-hover:text-muted-foreground transition-colors duration-300">
                 {companyName}
               </span>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-sm">
+            <p className="mt-3 sm:mt-4 text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-sm">
               Crafting high-performance digital products that drive growth and transform businesses.
             </p>
           </div>
 
           {/* Navigation */}
-          <nav className="flex items-center gap-8" aria-label="Footer navigation">
+          <nav className="flex flex-wrap items-center gap-4 sm:gap-6 lg:gap-8" aria-label="Footer navigation">
             {[
               { label: "Home", href: "/" },
               { label: "Work", href: "/work" },
@@ -104,7 +104,7 @@ export function Footer({ companyName, copyright }: FooterProps) {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
+                className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
               >
                 {link.label}
               </Link>
@@ -113,11 +113,11 @@ export function Footer({ companyName, copyright }: FooterProps) {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground/60">
+        <div className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+          <p className="text-[10px] sm:text-xs text-muted-foreground/60">
             {currentYear} {copyright}
           </p>
-          <p className="text-xs text-muted-foreground/40">
+          <p className="text-[10px] sm:text-xs text-muted-foreground/40">
             Built with precision and care
           </p>
         </div>

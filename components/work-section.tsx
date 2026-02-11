@@ -56,7 +56,7 @@ function FeaturedCard({ project }: { project: Project }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="relative aspect-[21/9] overflow-hidden rounded-2xl bg-card border border-border hover:border-foreground/15 transition-colors duration-500">
+      <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] overflow-hidden rounded-2xl bg-card border border-border hover:border-foreground/15 transition-colors duration-500">
         <div ref={imageRef} className="absolute inset-0">
           <Image
             src={project.thumbnail || "/placeholder.svg"}
@@ -77,44 +77,44 @@ function FeaturedCard({ project }: { project: Project }) {
           className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/8 to-transparent pointer-events-none"
           style={{ transform: "translateX(-100%)" }}
         />
-        <div className="absolute top-6 left-6 z-10">
-          <span className="font-mono text-sm text-foreground/60 bg-background/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-foreground/10">
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
+          <span className="font-mono text-xs sm:text-sm text-foreground/60 bg-background/60 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-foreground/10">
             01
           </span>
         </div>
-        <div className="absolute top-6 right-6 z-10">
-          <span className="text-xs tracking-widest uppercase text-foreground/60 bg-background/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-foreground/10">
+        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10">
+          <span className="text-[10px] sm:text-xs tracking-widest uppercase text-foreground/60 bg-background/60 backdrop-blur-md px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-foreground/10">
             Featured
           </span>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
-          <div className="flex items-end justify-between gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-3">
+        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 z-10">
+          <div className="flex items-end justify-between gap-4 sm:gap-6">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 mb-2 sm:mb-3">
                 <span className="text-xs tracking-wider uppercase text-muted-foreground">
                   {project.category}
                 </span>
                 <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
                 <span className="text-xs text-muted-foreground">{project.year}</span>
               </div>
-              <h3 className="font-display text-3xl lg:text-4xl font-bold text-foreground tracking-tight">
+              <h3 className="font-display text-xl sm:text-2xl lg:text-4xl font-bold text-foreground tracking-tight">
                 {project.title}
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-xl">
+              <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xl line-clamp-2 sm:line-clamp-none">
                 {project.shortDescription}
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-3 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2">
                 {project.techStack.map((tech) => (
                   <span
                     key={tech}
-                    className="px-3 py-1 text-xs rounded-full border border-foreground/10 text-muted-foreground bg-background/40 backdrop-blur-sm"
+                    className="px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs rounded-full border border-foreground/10 text-muted-foreground bg-background/40 backdrop-blur-sm"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
             </div>
-            <div className="flex-shrink-0 w-12 h-12 rounded-full border border-foreground/20 flex items-center justify-center text-foreground/40 group-hover:text-foreground group-hover:border-foreground/60 transition-all duration-500 group-hover:rotate-45">
+            <div className="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-full border border-foreground/20 items-center justify-center text-foreground/40 group-hover:text-foreground group-hover:border-foreground/60 transition-all duration-500 group-hover:rotate-45">
               <ArrowUpRight className="w-5 h-5" />
             </div>
           </div>
@@ -286,8 +286,8 @@ export function WorkSection({
   const rest = projects.slice(1, 4);
 
   return (
-    <section ref={sectionRef} id="work" className="py-24 lg:py-32">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+    <section ref={sectionRef} id="work" className="py-16 sm:py-24 lg:py-32">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-12">
         <SectionHeading
           subtitle="Selected Work"
           title={sectionTitle}
