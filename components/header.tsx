@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 interface HeaderProps {
   companyName: string;
@@ -55,9 +56,8 @@ export function Header({ companyName, navigation }: HeaderProps) {
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
       <div
         ref={pillRef}
-        className={`relative w-full max-w-[900px] transition-all duration-500 ${
-          isScrolled ? "max-w-[860px]" : "max-w-[900px]"
-        }`}
+        className={`relative w-full max-w-[900px] transition-all duration-500 ${isScrolled ? "max-w-[860px]" : "max-w-[900px]"
+          }`}
         style={{ opacity: 0 }}
       >
         <nav className="relative flex items-center justify-between rounded-full border border-border bg-background/90 backdrop-blur-xl px-3 py-2">
@@ -66,27 +66,16 @@ export function Header({ companyName, navigation }: HeaderProps) {
             href="/"
             className="flex items-center gap-2.5 pl-3 flex-shrink-0 group"
           >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="text-foreground"
-            >
-              <path
-                d="M4 7h3l2-3h6l2 3h3a1 1 0 011 1v4a1 1 0 01-1 1h-2l-2 3H8l-2-3H4a1 1 0 01-1-1V8a1 1 0 011-1z"
-                fill="currentColor"
-              />
-              <path
-                d="M7 17v3M12 16v4M17 17v3"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="font-display text-base font-bold text-foreground tracking-tight group-hover:text-muted-foreground transition-colors duration-300">
+            <Image
+              src="/mix.png"
+              width={70}
+              height={70}
+              preload={true}
+              alt="Picture of the author"
+            />
+            {/* <span className="font-display text-base font-bold text-foreground tracking-tight group-hover:text-muted-foreground transition-colors duration-300">
               {companyName}
-            </span>
+            </span> */}
           </Link>
 
           {/* Desktop nav */}
@@ -97,11 +86,10 @@ export function Header({ companyName, navigation }: HeaderProps) {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className={`relative px-4 py-2 text-sm transition-colors duration-300 rounded-full ${
-                      active
-                        ? "text-foreground font-medium"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
+                    className={`relative px-4 py-2 text-sm transition-colors duration-300 rounded-full ${active
+                      ? "text-foreground font-medium"
+                      : "text-muted-foreground hover:text-foreground"
+                      }`}
                   >
                     {item.label}
                     {active && (
@@ -150,11 +138,10 @@ export function Header({ companyName, navigation }: HeaderProps) {
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className={`block text-lg font-display font-semibold py-2 transition-colors ${
-                        active
-                          ? "text-foreground"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
+                      className={`block text-lg font-display font-semibold py-2 transition-colors ${active
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                        }`}
                       onClick={() => setIsMobileOpen(false)}
                     >
                       {item.label}
